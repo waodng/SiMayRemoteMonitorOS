@@ -78,7 +78,7 @@ namespace SiMay.RemoteControls.Core
         /// <returns></returns>
         public static string GetApplicationKey(this Type type)
         {
-            var attr = type.GetCustomAttribute<ApplicationServiceKeyAttribute>(true);
+            var attr = type.GetCustomAttribute<SiMay.Core.ApplicationKeyAttribute>(true);
             return attr.Key;
         }
     }

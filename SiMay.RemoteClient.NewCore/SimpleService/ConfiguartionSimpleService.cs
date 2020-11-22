@@ -15,14 +15,16 @@ namespace SiMay.Service.Core
         public void SetDescribe(SessionProviderContext session)
         {
             var des = session.GetMessage().ToUnicodeString();
-            AppConfiguartion.RemarkInfomation = des;
+            AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Describe = des;
+            AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Flush();
         }
 
         [PacketHandler(MessageHead.S_SIMPLE_GROUP_NAME)]
         public void SetGroupName(SessionProviderContext session)
         {
             var groupName = session.GetMessage().ToUnicodeString();
-            AppConfiguartion.GroupName = groupName;
+            AppConfiguration.GetApplicationConfiguration<AppConfiguration>().GroupName = groupName;
+            AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Flush();
         }
     }
 }

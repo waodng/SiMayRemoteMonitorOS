@@ -8,7 +8,7 @@ using System.IO;
 namespace SiMay.Service.Core
 {
     [ServiceName("Shell管理")]
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_SHELL)]
+    [ApplicationKey(ApplicationKeyConstant.REMOTE_SHELL)]
     public class ShellService : ApplicationRemoteService
     {
         private Process _pipe;

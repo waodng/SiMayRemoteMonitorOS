@@ -403,7 +403,7 @@ namespace SiMay.RemoteMonitor.Application
                 return;
             }
 
-            EnterForm dlg = new EnterForm();
+            InputDialog dlg = new InputDialog();
             dlg.Caption = "请输入文件夹名称!";
             if (dlg.ShowDialog() == DialogResult.OK && !dlg.Value.IsNullOrEmpty())
             {
@@ -474,7 +474,7 @@ namespace SiMay.RemoteMonitor.Application
                     MessageBoxHelper.ShowBoxError("磁盘不能作为重命名的对象!");
                     return;
                 }
-                EnterForm dlg = new EnterForm();
+                InputDialog dlg = new InputDialog();
                 dlg.Caption = "请为 " + file.FileName + " 命名新的名称!";
                 dlg.Value = file.FileName;
                 if (dlg.Value != "" && dlg.ShowDialog() == DialogResult.OK)
@@ -591,10 +591,10 @@ namespace SiMay.RemoteMonitor.Application
             this.downloadAsToolStripMenuItem.Enabled = true;
         }
 
-        private IFileStream ByLocalFileChooseTransferMode(string localFileName)
+        private IStream ByLocalFileChooseTransferMode(string localFileName)
         {
 
-            IFileStream ifileStream = null;
+            IStream ifileStream = null;
             if (FileHelper.VerifyLongPath(localFileName))
             {
                 LogHelper.WriteErrorByCurrentMethod("localFileName 指定的路径或文件名太长，或者两者都太长。完全限定文件名必须少于 260 个字符，并且目录名必须少于 248 个字符。local:{0}".FormatTo(localFileName));

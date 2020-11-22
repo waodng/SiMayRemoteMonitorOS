@@ -1,4 +1,5 @@
-﻿using SiMay.Basic;
+﻿using Newtonsoft.Json;
+using SiMay.Basic;
 using SiMay.Core;
 using SiMay.Net.SessionProvider;
 using SiMay.RemoteControls.Core;
@@ -56,6 +57,9 @@ namespace SiMay.RemoteMonitor.MainApplication
                 .ApplicationRegister<TcpConnectionApplication>()
                 .ApplicationRegister<VideoApplication>();
 
+            var config = File.Exists(SysConstantsExtend.ConfigPath) ? JsonConvert.DeserializeObject<SystemAppConfig>(File.ReadAllText(SysConstantsExtend.ConfigPath)) : new SystemAppConfig();
+            AppConfiguration.SetOption(config);
+
             this.ViewOnAdaptiveHandler();
             this.OnLoadConfiguration();
             this.RegisterMessageHandler();
@@ -68,8 +72,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             this.Text = "SiMay远程监控管理系统-IOASJHD 正式版_" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-
-            if (AppConfiguration.WindowMaximize)
+            if (AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().WindowMaximize)
                 this.WindowState = FormWindowState.Maximized;
 
             this._imgList = new ImageList();
@@ -102,15 +105,15 @@ namespace SiMay.RemoteMonitor.MainApplication
             this._flowCalcTimer.Start();
             #endregion
 
-            if (AppConfiguration.SessionMode == "1")
+            if (AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().SessionMode == 1)
             {
-                this.stripHost.Text = AppConfiguration.ServiceIPAddress;
-                this.stripPort.Text = AppConfiguration.ServicePort.ToString();
+                this.stripHost.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().MiddlerProxyIPAddress;
+                this.stripPort.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().MiddlerProxyPort.ToString();
             }
             else
             {
-                this.stripHost.Text = AppConfiguration.IPAddress;
-                this.stripPort.Text = AppConfiguration.Port.ToString();
+                this.stripHost.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().IPAddress;
+                this.stripPort.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Port.ToString();
             }
 
             this.rowtrackBar.Value = this._viewCarouselContext.ViewRow;
@@ -161,7 +164,7 @@ namespace SiMay.RemoteMonitor.MainApplication
                 }
             });
 
-            if (AppConfiguration.WindowsIsLock) //锁住主控界面
+            if (AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Haslock) //锁住主控界面
                 LockWindow();
 
             _viewCarouselTimer = new System.Timers.Timer(_viewCarouselContext.ViewCarouselInterval);
@@ -175,10 +178,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             this.ViewOnAdaptiveHandler();
         }
-        private void desktopViewLayout_Scroll(object sender, ScrollEventArgs e)
-        {
-            //this.ViewOnAdaptiveHandler();
-        }
+
         private void ViewOnAdaptiveHandler()
         {
             var viewCount = _viewCarouselContext.ViewColum * _viewCarouselContext.ViewRow;
@@ -258,13 +258,11 @@ namespace SiMay.RemoteMonitor.MainApplication
         /// </summary>
         private void RegisterMessageHandler()
         {
-            //this._appMainAdapterHandler.ViewRefreshInterval = _viewCarouselContext.ViewFreshInterval;
             this._appMainAdapterHandler.SynchronizationContext = SynchronizationContext.Current;
             this._appMainAdapterHandler.OnProxyNotifyHandlerEvent += OnProxyNotify;
             this._appMainAdapterHandler.OnReceiveHandlerEvent += OnReceiveHandlerEvent;
             this._appMainAdapterHandler.OnTransmitHandlerEvent += OnTransmitHandlerEvent;
             this._appMainAdapterHandler.OnLogOutHandlerEvent += OnLogOutHandlerEvent;
-            //this._appMainAdapterHandler.OnCreateDesktopViewHandlerEvent += OnCreateDesktopViewHandlerEvent;
             this._appMainAdapterHandler.OnLoginHandlerEvent += OnLoginHandlerEvent;
             this._appMainAdapterHandler.OnApplicationCreatedEventHandler += OnApplicationCreatedEventHandler;
             this._appMainAdapterHandler.OnLogHandlerEvent += OnLogHandlerEvent;
@@ -299,7 +297,9 @@ namespace SiMay.RemoteMonitor.MainApplication
             syncContext[SysConstantsExtend.SessionListItem] = listItem;
 
             //是否开启桌面视图
-            //if (!syncContext[SysConstants.OpenScreenWall].ConvertTo<bool>())
+            if (AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AutoDesktopViewList.Contains(syncContext[SysConstants.IdentifyId].ToString()))
+                this.CreateDesktopView(syncContext);
+            else
                 listItem.BackColor = _closeScreenColor;
 
             var groupName = syncContext[SysConstants.GroupName].ConvertTo<string>();
@@ -318,9 +318,6 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void OnLogOutHandlerEvent(SessionSyncContext syncContext)
         {
-            //if (syncContext.KeyDictions.ContainsKey(SysConstants.DesktopView))                    //如果屏幕墙已开启,移除桌面墙
-            //    this.DisposeDesktopView(syncContext[SysConstants.DesktopView].ConvertTo<UDesktopView>());
-
             this.CloseDesktopView(syncContext);
 
             syncContext[SysConstantsExtend.SessionListItem].ConvertTo<USessionListItem>().Remove();
@@ -328,14 +325,6 @@ namespace SiMay.RemoteMonitor.MainApplication
             _connect_count--;
             stripConnectedNum.Text = _connect_count.ToString();
         }
-
-        //private IDesktopView OnCreateDesktopViewHandlerEvent(SessionSyncContext syncContext)
-        //{
-
-
-        //    return view;
-        //}
-
         private void OnTransmitHandlerEvent(SessionProviderContext session)
             => this._sendTransferredBytes += session.SendTransferredBytes;
 
@@ -361,18 +350,6 @@ namespace SiMay.RemoteMonitor.MainApplication
                     }
                     break;
             }
-        }
-
-
-        /// <summary>
-        /// 从主控端移除桌面墙
-        /// </summary>
-        /// <param name="view"></param>
-        private void DisposeDesktopView(UDesktopView view)
-        {
-            this.desktopViewLayout.Controls.Remove(view);
-            view.OnDoubleClickEvent -= DesktopViewDbClick;
-            view.Dispose();
         }
 
         /// <summary>
@@ -420,8 +397,10 @@ namespace SiMay.RemoteMonitor.MainApplication
         private void LockWindow()
         {
             this.Hide();
-            AppConfiguration.WindowsIsLock = true;
-            LockWindowsForm form = new LockWindowsForm();
+            AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Haslock = true;
+            AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Flush();
+
+            LockWindow form = new LockWindow();
             form.ShowDialog();
             this.Show();
         }
@@ -454,7 +433,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         /// <param name="session"></param>
         private void DesktopViewDbClick(SessionSyncContext syncContext)
         {
-            this._appMainAdapterHandler.RemoteActivateService(syncContext, AppConfiguration.DbClickViewExc);
+            this._appMainAdapterHandler.RemoteActivateService(syncContext, AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DbClickViewExc);
         }
 
         /// <summary>
@@ -509,6 +488,11 @@ namespace SiMay.RemoteMonitor.MainApplication
                 view.StartPlay();
                 this.desktopViewLayout.Controls.Add(view);
                 syncContext[SysConstantsExtend.DesktopView] = view;
+
+                var id = syncContext[SysConstants.IdentifyId].ToString();
+                if (!AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AutoDesktopViewList.Any(c => c.Equals(id, StringComparison.OrdinalIgnoreCase)))
+                    AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AutoDesktopViewList.Add(id);
+
                 return true;
             }
             return false;
@@ -524,15 +508,15 @@ namespace SiMay.RemoteMonitor.MainApplication
                 view.Dispose();
                 this.desktopViewLayout.Controls.Remove(view);
                 syncContext[SysConstantsExtend.DesktopView] = null;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AutoDesktopViewList.Remove(syncContext[SysConstants.IdentifyId].ToString());
                 return true;
             }
-
             return false;
         }
 
         private void SystemOption(object sender, EventArgs e)
         {
-            AppSettingForm configForm = new AppSettingForm();
+            AppSetting configForm = new AppSetting();
             configForm.ShowDialog();
         }
 
@@ -546,7 +530,7 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void CreateService(object sender, EventArgs e)
         {
-            BuilderServiceForm serviceBuilder = new BuilderServiceForm();
+            ServiceBuilder serviceBuilder = new ServiceBuilder();
             serviceBuilder.ShowDialog();
         }
 
@@ -619,7 +603,7 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void ModifyRemark(object sender, EventArgs e)
         {
-            EnterForm f = new EnterForm();
+            InputDialog f = new InputDialog();
             f.Caption = "请输入备注名称";
             DialogResult result = f.ShowDialog();
             if (f.Value != "" && result == DialogResult.OK)
@@ -634,9 +618,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         private void CopyRuningLog(object sender, EventArgs e)
         {
             if (logList.SelectedItems.Count != 0)
-            {
                 Clipboard.SetText(logList.Items[logList.SelectedItems[0].Index].SubItems[1].Text);
-            }
         }
 
         private void DeleteRuningLog(object sender, EventArgs e)
@@ -668,7 +650,7 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void SendMessageBox(object sender, EventArgs e)
         {
-            NotifyMessageBoxForm dlg = new NotifyMessageBoxForm();
+            MessageBoxForm dlg = new MessageBoxForm();
             DialogResult result = dlg.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -695,21 +677,14 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void RemoteDownloadExecete(object sender, EventArgs e)
         {
-            //EnterForm input = new EnterForm();
-            //input.Caption = "可执行文件的下载地址!";
-            //DialogResult result = input.ShowDialog();
-            //if (input.Value != "" && result == DialogResult.OK)
-            //{
-            //    if (input.Value.IndexOf("http://") == -1 && input.Value.IndexOf("https://") == -1)
-            //    {
-            //        MessageBoxHelper.ShowBoxExclamation("输入的网址不合法");
-            //        return;
-            //    }
-            //    this.GetSelectedListItem().ForEach(c =>
-            //    {
-            //        this._appMainAdapterHandler.RemoteHttpDownloadExecute(c.SessionSyncContext, input.Value);
-            //    });
-            //}
+            this.GetSelectedListItem().ForEach(c =>
+            {
+                var downManger = new DownloadManagement();
+                downManger.SessionSyncContext = c.SessionSyncContext;
+                downManger.ShellSimpleApplication = _appMainAdapterHandler.SimpleApplicationCollection.GetSimpleApplication<ShellSimpleApplication>();
+                downManger.WebSimpleApplication = _appMainAdapterHandler.SimpleApplicationCollection.GetSimpleApplication<WebSimpleApplication>();
+                downManger.Show();
+            });
         }
 
         private void About(object sender, EventArgs e)
@@ -783,7 +758,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         }
         private void toolStripButton7_Click(object sender, EventArgs e)
         {
-            NotifyMessageBoxForm dlg = new NotifyMessageBoxForm();
+            MessageBoxForm dlg = new MessageBoxForm();
             DialogResult result = dlg.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -796,21 +771,14 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            //EnterForm input = new EnterForm();
-            //input.Caption = "可执行文件的下载地址";
-            //DialogResult result = input.ShowDialog();
-            //if (input.Value != "" && result == DialogResult.OK)
-            //{
-            //    if (input.Value.IndexOf("http://") == -1 && input.Value.IndexOf("https://") == -1)
-            //    {
-            //        MessageBoxHelper.ShowBoxExclamation("输入的网址不合法");
-            //        return;
-            //    }
-            //    this.GetSelectedDesktopView().ForEach(c =>
-            //    {
-            //        this._appMainAdapterHandler.RemoteHttpDownloadExecute(c.SessionSyncContext, input.Value);
-            //    });
-            //}
+            this.GetSelectedDesktopView().ForEach(c =>
+            {
+                var downManger = new DownloadManagement();
+                downManger.SessionSyncContext = c.SessionSyncContext;
+                downManger.ShellSimpleApplication = _appMainAdapterHandler.SimpleApplicationCollection.GetSimpleApplication<ShellSimpleApplication>();
+                downManger.WebSimpleApplication = _appMainAdapterHandler.SimpleApplicationCollection.GetSimpleApplication<WebSimpleApplication>();
+                downManger.Show();
+            });
         }
 
         private void toolStripButton8_Click(object sender, EventArgs e)
@@ -826,13 +794,13 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void toolStripButton10_Click(object sender, EventArgs e)
         {
-            AppSettingForm appConfigForm = new AppSettingForm();
+            AppSetting appConfigForm = new AppSetting();
             appConfigForm.ShowDialog();
         }
 
         private void toolStripButton9_Click(object sender, EventArgs e)
         {
-            BuilderServiceForm serviceBuilder = new BuilderServiceForm();
+            ServiceBuilder serviceBuilder = new ServiceBuilder();
             serviceBuilder.ShowDialog();
         }
 
@@ -852,11 +820,17 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void toolStripMenuItem6_Click_1(object sender, EventArgs e)
         {
-            EnterForm input = new EnterForm();
+            InputDialog input = new InputDialog();
             input.Caption = "请输入要打开的网页地址!";
+            input.Value = "http://";
             DialogResult result = input.ShowDialog();
-            if (input.Value != "" && result == DialogResult.OK)
+            if (!input.Value.IsNullOrEmpty() && result == DialogResult.OK)
             {
+                if (!HTTPChecker(input.Value))
+                {
+                    MessageBox.Show("URL地址不合法，请检查!", "提示", 0, MessageBoxIcon.Information);
+                    return;
+                }
                 this.GetSelectedListItem().ForEach(async c =>
                 {
                     await this._appMainAdapterHandler.SimpleApplicationCollection.GetSimpleApplication<ShellSimpleApplication>().ExecuteShell(c.SessionSyncContext.Session, input.Value);
@@ -864,12 +838,23 @@ namespace SiMay.RemoteMonitor.MainApplication
             }
         }
 
+        private bool HTTPChecker(string val)
+        {
+            return (val.Substring(0, 7) == "http://") || (val.Substring(0, 8) == "https://");
+        }
+
         private void MainApplication_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (MessageBox.Show("是否确认退出系统吗?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
-                this._isRun = false;
-                this._appMainAdapterHandler.Dispose();
+
+                try
+                {
+                    AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Flush();
+                    this._isRun = false;
+                    this._appMainAdapterHandler.Dispose();
+                }
+                catch (Exception) { }
             }
             else
             {
@@ -892,20 +877,6 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             this.LockWindow();
         }
-        private void toolStripMenuItem11_Click(object sender, EventArgs e)
-        {
-            //foreach (var item in this.GetSelectedListItem())
-            //{
-            //    var dlg = new DesktopRecordForm(item.SessionSyncContext);
-            //    dlg.Show();
-            //}
-        }
-
-        private void viewReviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //var recordViewer = new DesktopRecordViewerForm();
-            //recordViewer.Show();
-        }
 
         private void logList_MouseEnter(object sender, EventArgs e)
         {
@@ -919,7 +890,7 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void ToolStripMenuItem7_Click(object sender, EventArgs e)
         {
-            EnterForm input = new EnterForm();
+            InputDialog input = new InputDialog();
             input.Caption = "请输入分组名称";
             DialogResult result = input.ShowDialog();
             if (input.Value != "" && result == DialogResult.OK)
@@ -947,7 +918,7 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void UpdateClient_Click(object sender, EventArgs e)
         {
-            using (var dlg = new RemoteUpdateServiceForm())
+            using (var dlg = new RemoteUpdateService())
             {
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
@@ -996,8 +967,6 @@ namespace SiMay.RemoteMonitor.MainApplication
             var dialog = new DesktopViewWallSettingForm(_viewCarouselContext);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                //_appMainAdapterHandler.ViewRefreshInterval = _viewCarouselContext.ViewFreshInterval;
-
                 if (!_viewCarouselContext.CarouselEnabled)
                     this._viewCarouselTimer.Stop();
                 else

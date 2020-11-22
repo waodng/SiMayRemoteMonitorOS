@@ -14,7 +14,7 @@ using static SiMay.Platform.Windows.CommonWin32Api;
 namespace SiMay.Service.Core
 {
     [ServiceName("系统管理")]
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_SYSMANAGER)]
+    [ApplicationKey(ApplicationKeyConstant.REMOTE_SYSMANAGER)]
     public class SystemService : ApplicationRemoteService
     {
         private ComputerInfo _memoryInfo = new ComputerInfo();
@@ -171,7 +171,7 @@ namespace SiMay.Service.Core
             infos.Add(new SystemInfoItem()
             {
                 ItemName = "被控服务启动时间",
-                Value = AppConfiguartion.RunTime
+                Value = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.RunTime.ToString()
             });
             infos.Add(new SystemInfoItem()
             {
@@ -205,7 +205,7 @@ namespace SiMay.Service.Core
             infos.Add(new SystemInfoItem()
             {
                 ItemName = "被控服务版本",
-                Value = AppConfiguartion.Version
+                Value = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.Version
             });
             infos.Add(new SystemInfoItem()
             {

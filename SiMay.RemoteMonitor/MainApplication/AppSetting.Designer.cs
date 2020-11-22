@@ -1,6 +1,6 @@
 ﻿namespace SiMay.RemoteMonitor.MainApplication
 {
-    partial class AppSettingForm
+    partial class AppSetting
     {
         /// <summary>
         /// Required designer variable.

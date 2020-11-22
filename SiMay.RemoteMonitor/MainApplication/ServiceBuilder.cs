@@ -14,10 +14,10 @@ using System.Windows.Forms;
 namespace SiMay.RemoteMonitor.MainApplication
 {
 
-    public partial class BuilderServiceForm : Form
+    public partial class ServiceBuilder : Form
     {
 
-        public BuilderServiceForm()
+        public ServiceBuilder()
         {
             InitializeComponent();
         }
@@ -201,28 +201,17 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void BuildClientForm_Load(object sender, EventArgs e)
         {
-            txtAccesskey.Text = AppConfiguration.ConnectPassWord;
-            string strHosts = AppConfiguration.LHostString;
+            txtAccesskey.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().ValidatePassWord;
 
-            int index = int.Parse(AppConfiguration.SessionMode);
+            int index = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().SessionMode;
             sessionModeList.SelectedIndex = index;
 
             installMode.Text = installMode.Items[0].ToString();
 
-            string[] strarrays = strHosts.Split(',');
-
-            for (int i = 0; i < strarrays.Length - 1; i++)
+            foreach (var item in AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().HistoryCreateHosting)
             {
-                string[] strs = strarrays[i].Split(':');
-
-                if (!localHosts.ContainsKey(strs[0]))
-                {
-                    localHosts.Add(strs[0], strs[1]);
-                    mls_address.Items.Add(strs[0]);
-                    mls_port.Items.Add(strs[1]);
-                }
-                else
-                    logList.Items.Add("..配置文件存在重复域名!");
+                mls_address.Items.Add(item.Split(',')[0]);
+                mls_port.Items.Add(item.Split(',')[1]);
             }
         }
 
@@ -265,7 +254,7 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void SaveAddressInfo()
         {
-            AppConfiguration.LHostString = string.Join(",", localHosts.Select(c => c.Key + ":" + c.Value).ToArray()); ;
+            AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().HistoryCreateHosting = localHosts.Select(c => c.Key + ":" + c.Value).ToList();
             logList.Items.Add("记录已保存");
 
         }

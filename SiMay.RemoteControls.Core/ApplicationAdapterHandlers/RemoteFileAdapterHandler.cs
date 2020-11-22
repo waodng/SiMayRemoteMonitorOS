@@ -13,7 +13,7 @@ using SiMay.Serialize.Standard;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_FILE)]
+    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_FILE)]
     public class RemoteFileAdapterHandler : ApplicationBaseAdapterHandler
     {
         /// <summary>
@@ -303,7 +303,7 @@ namespace SiMay.RemoteControls.Core
         /// <param name="fileStream">文件流</param>
         /// <param name="remoteFileName">远程文件名</param>
         /// <returns></returns>
-        public async Task DownloadFile(IFileStream fileStream, string remoteFileName)
+        public async Task DownloadFile(IStream fileStream, string remoteFileName)
         {
             //LogHelper.DebugWriteLog("begin download frist Data fileName:" + Path.GetFileName(localFileName));
 
@@ -366,7 +366,7 @@ namespace SiMay.RemoteControls.Core
             fileStream.Close();
         }
 
-        private async Task<long?> AwaitResetDownloadFile(IFileStream fileStream)
+        private async Task<long?> AwaitResetDownloadFile(IStream fileStream)
         {
             return await Task.Run(() =>
             {
@@ -456,7 +456,7 @@ namespace SiMay.RemoteControls.Core
         /// <param name="onSelectedFileTransferMode">选择覆盖模式</param>
         /// <returns></returns>
         public async Task UploadFile(
-            IFileStream fileStream,
+            IStream fileStream,
             string remoteFileName,
             Func<string, TransportMode> onSelectedFileTransferMode)
         {
@@ -606,7 +606,7 @@ namespace SiMay.RemoteControls.Core
 
         //重复使用缓冲区，减少内存碎片
         byte[] _fileBuffer = new byte[FILE_BUFFER_SIZE];
-        private byte[] ReadFileStream(IFileStream fileStream)
+        private byte[] ReadFileStream(IStream fileStream)
         {
             int lenght = fileStream.Read(_fileBuffer, 0, _fileBuffer.Length);
             if (lenght == _fileBuffer.Length)
@@ -662,7 +662,7 @@ namespace SiMay.RemoteControls.Core
 
         public async Task DownloadDirectory(
             string remotedirectory,
-            Func<string, IFileStream> onCreateFileStream,
+            Func<string, IStream> onCreateFileStream,
             Action<string> onCreateDicectroy)
         {
         reset:

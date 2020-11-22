@@ -10,7 +10,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_TCP)]
+    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_TCP)]
     public class TcpConnectionAdapterHandler : ApplicationBaseAdapterHandler
     {
         /// <summary>

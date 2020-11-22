@@ -84,6 +84,9 @@
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -185,6 +188,12 @@
     <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="Helper\MessageBoxHelper.cs" />
     <Compile Include="Helper\PCMStreamToWavHelper.cs" />
+    <Compile Include="MainApplication\AddDownload.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainApplication\AddDownload.Designer.cs">
+      <DependentUpon>AddDownload.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainApplication\DesktopViewCarousel\DesktopViewWallSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -192,11 +201,17 @@
       <DependentUpon>DesktopViewWallSettingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainApplication\DesktopViewCarousel\DesktopViewSettingContext.cs" />
-    <Compile Include="MainApplication\RemoteUpdateServiceForm.cs">
+    <Compile Include="MainApplication\DownloadManagement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication\RemoteUpdateServiceForm.Designer.cs">
-      <DependentUpon>RemoteUpdateServiceForm.cs</DependentUpon>
+    <Compile Include="MainApplication\DownloadManagement.Designer.cs">
+      <DependentUpon>DownloadManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainApplication\RemoteUpdateService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainApplication\RemoteUpdateService.Designer.cs">
+      <DependentUpon>RemoteUpdateService.cs</DependentUpon>
     </Compile>
     <Compile Include="SystemConfig.cs" />
     <Compile Include="UnconventionalApplication\RemoteUpdateApplication.cs" />
@@ -248,17 +263,17 @@
     <Compile Include="Application\AudioApplication.Designer.cs">
       <DependentUpon>AudioApplication.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainApplication\BuilderServiceForm.cs">
+    <Compile Include="MainApplication\ServiceBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication\BuilderServiceForm.Designer.cs">
-      <DependentUpon>BuilderServiceForm.cs</DependentUpon>
+    <Compile Include="MainApplication\ServiceBuilder.Designer.cs">
+      <DependentUpon>ServiceBuilder.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainApplication\EnterForm.cs">
+    <Compile Include="MainApplication\InputDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication\EnterForm.Designer.cs">
-      <DependentUpon>EnterForm.cs</DependentUpon>
+    <Compile Include="MainApplication\InputDialog.Designer.cs">
+      <DependentUpon>InputDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\FileTransferModeForm.cs">
       <SubType>Form</SubType>
@@ -267,11 +282,11 @@
       <DependentUpon>FileTransferModeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\USessionListItem.cs" />
-    <Compile Include="MainApplication\NotifyMessageBoxForm.cs">
+    <Compile Include="MainApplication\MessageBoxForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication\NotifyMessageBoxForm.Designer.cs">
-      <DependentUpon>NotifyMessageBoxForm.cs</DependentUpon>
+    <Compile Include="MainApplication\MessageBoxForm.Designer.cs">
+      <DependentUpon>MessageBoxForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\KeyboardApplication.cs">
       <SubType>Form</SubType>
@@ -279,11 +294,11 @@
     <Compile Include="Application\KeyboardApplication.Designer.cs">
       <DependentUpon>KeyboardApplication.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainApplication\LockWindowsForm.cs">
+    <Compile Include="MainApplication\LockWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication\LockWindowsForm.Designer.cs">
-      <DependentUpon>LockWindowsForm.cs</DependentUpon>
+    <Compile Include="MainApplication\LockWindow.Designer.cs">
+      <DependentUpon>LockWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="MainApplication\MainApplication.cs">
       <SubType>Form</SubType>
@@ -293,12 +308,6 @@
     </Compile>
     <Compile Include="UserControls\ProcessListviewitem.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="MainApplication\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainApplication\ProgressForm.Designer.cs">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Application\ScreenApplication.cs">
       <SubType>Form</SubType>
@@ -306,11 +315,11 @@
     <Compile Include="Application\ScreenApplication.Designer.cs">
       <DependentUpon>ScreenApplication.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainApplication\AppSettingForm.cs">
+    <Compile Include="MainApplication\AppSetting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication\AppSettingForm.Designer.cs">
-      <DependentUpon>AppSettingForm.cs</DependentUpon>
+    <Compile Include="MainApplication\AppSetting.Designer.cs">
+      <DependentUpon>AppSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\ShellApplication.cs">
       <SubType>Form</SubType>
@@ -386,35 +395,38 @@
     <EmbeddedResource Include="MainApplication\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\BuilderServiceForm.resx">
-      <DependentUpon>BuilderServiceForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainApplication\AddDownload.resx">
+      <DependentUpon>AddDownload.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainApplication\DownloadManagement.resx">
+      <DependentUpon>DownloadManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainApplication\ServiceBuilder.resx">
+      <DependentUpon>ServiceBuilder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainApplication\DesktopViewCarousel\DesktopViewWallSettingForm.resx">
       <DependentUpon>DesktopViewWallSettingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\EnterForm.resx">
-      <DependentUpon>EnterForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainApplication\InputDialog.resx">
+      <DependentUpon>InputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Application\FileTransferModeForm.resx">
       <DependentUpon>FileTransferModeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\NotifyMessageBoxForm.resx">
-      <DependentUpon>NotifyMessageBoxForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainApplication\MessageBoxForm.resx">
+      <DependentUpon>MessageBoxForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Application\KeyboardApplication.resx">
       <DependentUpon>KeyboardApplication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\LockWindowsForm.resx">
-      <DependentUpon>LockWindowsForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainApplication\LockWindow.resx">
+      <DependentUpon>LockWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainApplication\MainApplication.resx">
       <DependentUpon>MainApplication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\ProgressForm.resx">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\RemoteUpdateServiceForm.resx">
-      <DependentUpon>RemoteUpdateServiceForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainApplication\RemoteUpdateService.resx">
+      <DependentUpon>RemoteUpdateService.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -424,8 +436,8 @@
     <EmbeddedResource Include="Application\ScreenApplication.resx">
       <DependentUpon>ScreenApplication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainApplication\AppSettingForm.resx">
-      <DependentUpon>AppSettingForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainApplication\AppSetting.resx">
+      <DependentUpon>AppSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Application\ShellApplication.resx">
       <DependentUpon>ShellApplication.cs</DependentUpon>

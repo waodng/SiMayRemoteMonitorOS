@@ -10,9 +10,8 @@ namespace SiMay.RemoteControls.Core
     /// <summary>
     /// 文件流接口(解耦各种实现方式)
     /// </summary>
-    public interface IFileStream
+    public interface IStream
     {
-        string FullFileName { get; }
         long Length { get; }
         long Position { get; set; }
         void Write(byte[] data, int offset, int length);

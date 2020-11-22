@@ -253,7 +253,7 @@ namespace SiMay.RemoteMonitor.Application
                             this.RemoteScreenAdapterHandler.RemoteSetScreenQuantity(dlg.QualityValue);
                         break;
                     case IDM_SET_CLIPBOARD:
-                        using (var setClipoardDlg = new EnterForm())
+                        using (var setClipoardDlg = new InputDialog())
                         {
                             setClipoardDlg.Caption = "设置的剪切板内容:";
                             if (setClipoardDlg.ShowDialog() == DialogResult.OK)

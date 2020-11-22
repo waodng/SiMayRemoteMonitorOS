@@ -6,7 +6,7 @@ using SiMay.Platform.Windows;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_REGEDIT)]
+    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_REGEDIT)]
     public class RegistryEditorAdapterHandler : ApplicationBaseAdapterHandler
     {
         public delegate void KeysReceivedEventHandler(RegistryEditorAdapterHandler adapterHandler, string rootKey, RegSeekerMatchPacket[] matches);

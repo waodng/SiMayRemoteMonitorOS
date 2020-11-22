@@ -13,13 +13,13 @@ using SiMay.Net.SessionProvider;
 namespace SiMay.Service.Core
 {
     [ServiceName("远程桌面")]
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_DESKTOP)]
+    [ApplicationKey(ApplicationKeyConstant.REMOTE_DESKTOP)]
     public class ScreenService : ApplicationRemoteService
     {
         private int _bscanmode = 1; //0差异 1逐行
         private bool _cleanWallPaper = false;
         private static string wallpaper = string.Empty;
-        private bool _hasSystemAuthor = AppConfiguartion.SystemPermission;
+        private bool _hasSystemAuthor = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.SystemPermission;
         private ScreenSpy _spy;
 
         public override void SessionInited(SessionProviderContext session)
@@ -154,7 +154,7 @@ namespace SiMay.Service.Core
             var registryKey = RegistryEditor.GetWritableRegistryKey(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System");
             registryKey.SetValue("SoftwareSASGeneration", 00000003, Microsoft.Win32.RegistryValueKind.DWord);
 
-            if (AppConfiguartion.SystemPermission)
+            if (_hasSystemAuthor)
                 UserTrunkContext.UserTrunkContextInstance?.SendSas();
             else
                 User32.SendSAS(true);

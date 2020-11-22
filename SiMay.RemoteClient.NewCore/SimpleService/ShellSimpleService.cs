@@ -16,12 +16,7 @@ namespace SiMay.Service.Core
         public void ExecuteShell(SessionProviderContext session)
         {
             var cmd = session.GetMessage().ToUnicodeString();
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = "cmd.exe";
-            p.StartInfo.Arguments = cmd;
-            p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
-            p.StartInfo.CreateNoWindow = true;//不显示程序窗口
-            p.Start();//启动程序
+            Process.Start(cmd);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace SiMay.RemoteMonitor.UserControls
                 img.Image?.Dispose();
                 img.Image = image;
             }
-            await Task.Delay(1000);
+            await Task.Delay(AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DesktopViewRefreshInterval);
             if (this._isRun)
                 internalPlay();
         }

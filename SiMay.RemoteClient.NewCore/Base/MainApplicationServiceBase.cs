@@ -1,4 +1,5 @@
-﻿using SiMay.Basic;
+﻿using Newtonsoft.Json;
+using SiMay.Basic;
 using SiMay.Core;
 using SiMay.Net.SessionProvider;
 using SiMay.Net.SessionProvider.Providers;
@@ -70,22 +71,25 @@ namespace SiMay.Service.Core
                 SessionKind.MAIN_SERVICE_SESSION,
                 null
             };
+            var configJson = AppConfigRegValueHelper.GetValue("SiMayConfig");
+            if (!configJson.IsNull())
+            {
+                var config = JsonConvert.DeserializeObject<AppConfiguration>(configJson);
+                AppConfiguration.SetOption(config);
+            }
+            else
+                AppConfiguration.SetOption(new AppConfiguration());
 
-            AppConfiguartion.HostAddress = StartParameter.Host;
-            AppConfiguartion.HostPort = StartParameter.Port;
-            AppConfiguartion.AccessKey = StartParameter.AccessKey;
-            AppConfiguartion.DefaultRemarkInfo = StartParameter.RemarkInformation;
-            AppConfiguartion.DefaultGroupName = StartParameter.GroupName;
-            AppConfiguartion.IsAutoRun = StartParameter.IsAutoStart;
-            AppConfiguartion.IsHideExcutingFile = StartParameter.IsHide;
-            AppConfiguartion.RunTime = StartParameter.RunTimeText;
-            AppConfiguartion.Version = StartParameter.ServiceVersion;
-            AppConfiguartion.MiddleServiceMode = StartParameter.SessionMode == 1 ? true : false;
-            AppConfiguartion.IdentifyId = StartParameter.UniqueId;
-            AppConfiguartion.ServerIPEndPoint = RemoteIPEndPoint;
-            AppConfiguartion.ServiceDisplayName = StartParameter.ServiceDisplayName;
-            AppConfiguartion.ServiceName = StartParameter.ServiceName;
-            AppConfiguartion.SystemPermission = StartParameter.SystemPermission;
+
+            var describle = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Describe;
+            if (describle.IsNull())
+                AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Describe = StartParameter.DefaultDescribe;
+
+            var groupName = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().GroupName;
+            if (groupName.IsNull())
+                AppConfiguration.GetApplicationConfiguration<AppConfiguration>().GroupName = StartParameter.GroupName;
+
+            AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter = StartParameter;
         }
 
         private void ConnectToServer()
@@ -93,12 +97,12 @@ namespace SiMay.Service.Core
             //尝试解析出最新的域名地址
             ThreadHelper.ThreadPoolStart(c =>
             {
-                var ip = HostHelper.GetHostByName(AppConfiguartion.HostAddress);
+                var ip = HostHelper.GetHostByName(StartParameter.Host);
                 if (ip.IsNullOrEmpty())
                     return;
-                AppConfiguartion.ServerIPEndPoint = new IPEndPoint(IPAddress.Parse(ip), AppConfiguartion.HostPort);
+                RemoteIPEndPoint = new IPEndPoint(IPAddress.Parse(ip), StartParameter.Port);
             });
-            SessionProvider.ConnectAsync(AppConfiguartion.ServerIPEndPoint);
+            SessionProvider.ConnectAsync(RemoteIPEndPoint);
         }
 
         /// <summary>
@@ -112,7 +116,7 @@ namespace SiMay.Service.Core
                 new AcknowledPacket()
                 {
                     AccessId = accessId,//当前主控端标识
-                    AccessKey = AppConfiguartion.AccessKey,
+                    AccessKey = StartParameter.AccessKey,
                     Type = (byte)type,
                     AssemblyLoad = true
                 });

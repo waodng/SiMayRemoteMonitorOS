@@ -11,7 +11,7 @@ using System.Linq;
 namespace SiMay.Service.Core
 {
     [ServiceName("启动项管理")]
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_STARTUP)]
+    [ApplicationKey(ApplicationKeyConstant.REMOTE_STARTUP)]
     public class StartupService : ApplicationRemoteService
     {
         public override void SessionInited(SessionProviderContext session)

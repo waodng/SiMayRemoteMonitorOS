@@ -1,6 +1,6 @@
 ﻿namespace SiMay.RemoteMonitor.MainApplication
 {
-    partial class NotifyMessageBoxForm
+    partial class MessageBoxForm
     {
         /// <summary>
         /// Required designer variable.

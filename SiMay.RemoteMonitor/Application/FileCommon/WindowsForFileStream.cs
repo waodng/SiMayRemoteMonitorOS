@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SiMay.RemoteMonitor.Application.FileCommon
 {
-    public class WindowsForFileStream : IFileStream
+    public class WindowsForFileStream : IStream
     {
         private FileStream _fileStream;
 
@@ -17,7 +17,6 @@ namespace SiMay.RemoteMonitor.Application.FileCommon
         /// </summary>
         public WindowsForFileStream(FileStream fileStream)
             => this._fileStream = fileStream;
-        public string FullFileName => this._fileStream.Name;
 
         public long Length => this._fileStream.Length;
 

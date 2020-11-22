@@ -41,5 +41,10 @@ namespace SiMay.RemoteControls.Core
 
             return null;
         }
+
+        public async Task RemoveTask(SessionProviderContext session, string id)
+        {
+            await CallSimpleService(session, MessageHead.S_SIMPLE_REMOVE_TASK, id);
+        }
     }
 }

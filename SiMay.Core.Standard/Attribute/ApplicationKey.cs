@@ -4,9 +4,9 @@ using System.Text;
 
 namespace SiMay.Core
 {
-    public class ApplicationServiceKeyAttribute : Attribute
+    public class ApplicationKeyAttribute : Attribute
     {
         public string Key { get; set; }
-        public ApplicationServiceKeyAttribute(string key) => Key = key;
+        public ApplicationKeyAttribute(string key) => Key = key;
     }
 }

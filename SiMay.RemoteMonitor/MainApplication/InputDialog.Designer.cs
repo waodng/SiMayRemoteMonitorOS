@@ -1,6 +1,6 @@
 ﻿namespace SiMay.RemoteMonitor.MainApplication
 {
-    partial class EnterForm
+    partial class InputDialog
     {
         /// <summary>
         /// Required designer variable.

@@ -72,29 +72,31 @@ namespace SiMay.Service.Core
                 LogHelper.WriteErrorByCurrentMethod(ex);
             }
 
-            string CreateBatch(string currentFilePath, string newFilePath)
+ 
+        }
+
+        private string CreateBatch(string currentFilePath, string newFilePath)
+        {
+            try
             {
-                try
-                {
-                    string tempFilePath = this.GetTempFilePath(".bat");
+                string tempFilePath = this.GetTempFilePath(".bat");
 
-                    string updateBatch =
-                        "@echo off" + "\r\n" +
-                        "chcp 65001" + "\r\n" +
-                        "echo DONT CLOSE THIS WINDOW!" + "\r\n" +
-                        "ping -n 10 localhost > nul" + "\r\n" +
-                        "del /a /q /f " + "\"" + currentFilePath + "\"" + "\r\n" +
-                        "move /y " + "\"" + newFilePath + "\"" + " " + "\"" + currentFilePath + "\"" + "\r\n" +
-                        "start \"\" " + "\"" + currentFilePath + "\"" + "\r\n" +
-                        "del /a /q /f " + "\"" + tempFilePath + "\"";
+                string updateBatch =
+                    "@echo off" + "\r\n" +
+                    "chcp 65001" + "\r\n" +
+                    "echo DONT CLOSE THIS WINDOW!" + "\r\n" +
+                    "ping -n 10 localhost > nul" + "\r\n" +
+                    "del /a /q /f " + "\"" + currentFilePath + "\"" + "\r\n" +
+                    "move /y " + "\"" + newFilePath + "\"" + " " + "\"" + currentFilePath + "\"" + "\r\n" +
+                    "start \"\" " + "\"" + currentFilePath + "\"" + "\r\n" +
+                    "del /a /q /f " + "\"" + tempFilePath + "\"";
 
-                    File.WriteAllText(tempFilePath, updateBatch, new UTF8Encoding(false));
-                    return tempFilePath;
-                }
-                catch (Exception)
-                {
-                    return string.Empty;
-                }
+                File.WriteAllText(tempFilePath, updateBatch, new UTF8Encoding(false));
+                return tempFilePath;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
             }
         }
 
@@ -108,6 +110,32 @@ namespace SiMay.Service.Core
             } while (File.Exists(tempFilePath));
 
             return tempFilePath;
+        }
+
+        [PacketHandler(MessageHead.S_SIMPLE_CHOOES_FILE_UPDATE)]
+        public void ChooseFileUpdate(SessionProviderContext session)
+        {
+            var filePath = session.GetMessage().ToUnicodeString();
+            if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
+            {
+                var batchFile = CreateBatch(Application.ExecutablePath, filePath);
+                if (!batchFile.IsNullOrEmpty())
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        UseShellExecute = true,
+                        FileName = batchFile
+                    };
+                    Process.Start(startInfo);
+
+                    Environment.Exit(0);//退出程序
+                }
+                else
+                {
+                    LogHelper.WriteErrorByCurrentMethod("远程更新失败，更新脚本创建失败!");
+                }
+            }
         }
     }
 }

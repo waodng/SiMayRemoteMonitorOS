@@ -1,6 +1,6 @@
 ﻿namespace SiMay.RemoteMonitor.MainApplication
 {
-    partial class BuilderServiceForm
+    partial class ServiceBuilder
     {
         /// <summary>
         /// Required designer variable.

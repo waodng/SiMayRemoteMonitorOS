@@ -1,4 +1,5 @@
-﻿using SiMay.RemoteControls.Core;
+﻿using SiMay.Core;
+using SiMay.RemoteControls.Core;
 using SiMay.RemoteMonitor.UserControls;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,11 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             get
             {
-                return AppConfiguration.CarouselInterval;
+                return AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().CarouselInterval;
             }
             set
             {
-                AppConfiguration.CarouselInterval = value;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().CarouselInterval = value;
             }
         }
 
@@ -32,11 +33,11 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             get
             {
-                return AppConfiguration.DesktopRefreshInterval;
+                return AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DesktopViewRefreshInterval;
             }
             set
             {
-                AppConfiguration.DesktopRefreshInterval = value;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DesktopViewRefreshInterval = value;
             }
         }
 
@@ -47,11 +48,11 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             get
             {
-                return AppConfiguration.ViewRow;
+                return AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().ViewRow;
             }
             set
             {
-                AppConfiguration.ViewRow = value;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().ViewRow = value;
             }
         }
 
@@ -62,11 +63,11 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             get
             {
-                return AppConfiguration.ViewColumn;
+                return AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().ViewColumn;
             }
             set
             {
-                AppConfiguration.ViewColumn = value;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().ViewColumn = value;
             }
         }
 
@@ -92,11 +93,11 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             get
             {
-                return AppConfiguration.CarouselEnabled;
+                return AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().CarouselEnabled;
             }
             set
             {
-                AppConfiguration.CarouselEnabled = value;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().CarouselEnabled = value;
             }
         }
 

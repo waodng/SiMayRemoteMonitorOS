@@ -9,7 +9,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_SHELL)]
+    [ApplicationKey(ApplicationKeyConstant.REMOTE_SHELL)]
     public class ShellAdapterHandler : ApplicationBaseAdapterHandler
     {
         /// <summary>
@@ -26,7 +26,7 @@ namespace SiMay.RemoteControls.Core
 
         public void InputCommand(string command)
         {
-            SendToAsync( MessageHead.S_SHELL_INPUT, command);
+            SendToAsync(MessageHead.S_SHELL_INPUT, command);
         }
     }
 }

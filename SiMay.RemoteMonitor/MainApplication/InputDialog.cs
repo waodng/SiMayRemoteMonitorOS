@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace SiMay.RemoteMonitor.MainApplication
 {
-    public partial class EnterForm : Form
+    public partial class InputDialog : Form
     {
-        public EnterForm()
+        public InputDialog()
         {
             InitializeComponent();
         }

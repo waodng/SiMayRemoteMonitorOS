@@ -82,7 +82,7 @@ namespace SiMay.Net.SessionProvider.Providers
                 {
                     Type = (byte)type,
                     AccessId = ApplicationConfiguartion.Options.AccessId,
-                    AccessKey = type == ConnectionWorkType.MainApplicationConnection ? ApplicationConfiguartion.Options.MainAppAccessKey : ApplicationConfiguartion.Options.AccessKey
+                    AccessKey = ApplicationConfiguartion.Options.AccessKey
                 });
 
             var dataBuilder = new List<byte>();

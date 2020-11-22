@@ -1,4 +1,5 @@
 ﻿using SiMay.Basic;
+using SiMay.Core;
 using SiMay.RemoteControls.Core;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using System.Windows.Forms;
 
 namespace SiMay.RemoteMonitor.MainApplication
 {
-    public partial class LockWindowsForm : Form
+    public partial class LockWindow : Form
     {
-        public LockWindowsForm()
+        public LockWindow()
         {
             InitializeComponent();
         }
@@ -21,10 +22,10 @@ namespace SiMay.RemoteMonitor.MainApplication
         bool _ifree = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            if (pwdTextBox.Text.Equals(AppConfiguration.LockPassWord))
+            if (pwdTextBox.Text.Equals(AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().UnLockeCredential))
             {
                 this._ifree = true;
-                AppConfiguration.WindowsIsLock = false;
+                AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Haslock = false;
                 this.Close();
             }
             else

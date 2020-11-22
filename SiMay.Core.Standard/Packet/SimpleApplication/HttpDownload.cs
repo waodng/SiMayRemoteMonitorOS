@@ -40,6 +40,7 @@ namespace SiMay.Core
         /// <summary>
         /// 0=正常
         /// 1=结束下载
+        /// 2=下载完成
         /// </summary>
         public int Status { get; set; } = 0;
     }

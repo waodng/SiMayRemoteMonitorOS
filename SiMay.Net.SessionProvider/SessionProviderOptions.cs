@@ -23,11 +23,6 @@ namespace SiMay.Net.SessionProvider
         /// <summary>
         /// 主控端连接Key
         /// </summary>
-        public long MainAppAccessKey { get; set; }
-
-        /// <summary>
-        /// 中间服务访问Key
-        /// </summary>
         public long AccessKey { get; set; }
 
         /// <summary>

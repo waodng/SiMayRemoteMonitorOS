@@ -42,7 +42,7 @@ namespace SiMay.RemoteMonitor.UserControls
             //}
             this.SubItems.Add(SessionSyncContext[SysConstants.Remark].ConvertTo<string>());
             this.SubItems.Add(SessionSyncContext[SysConstants.ServiceVison].ConvertTo<string>());
-            this.SubItems.Add(SessionSyncContext[SysConstants.StartRunTime].ConvertTo<string>());
+            this.SubItems.Add(SessionSyncContext[SysConstants.StartRunTime].ToString());
             this.SubItems.Add(SessionSyncContext[SysConstants.GroupName].ConvertTo<string>());
         }
     }

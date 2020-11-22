@@ -5,9 +5,9 @@ using SiMay.Core;
 
 namespace SiMay.RemoteMonitor.MainApplication
 {
-    public partial class NotifyMessageBoxForm : Form
+    public partial class MessageBoxForm : Form
     {
-        public NotifyMessageBoxForm()
+        public MessageBoxForm()
         {
             InitializeComponent();
         }

@@ -15,7 +15,7 @@ using static SiMay.Serialize.Standard.PacketSerializeHelper;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_DESKTOP)]
+    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_DESKTOP)]
     public class RemoteScreenAdapterHandler : ApplicationBaseAdapterHandler
     {
 

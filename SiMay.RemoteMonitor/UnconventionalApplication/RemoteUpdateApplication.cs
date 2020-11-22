@@ -12,27 +12,35 @@ namespace SiMay.RemoteMonitor.UnconventionalApplication
 {
     [Rank(100)]
     [ApplicationName("远程更新")]
-    //[Application(typeof(RemoteUpdateAdapterHandler), ApplicationKeyConstant.REMOTE_UPDATE, 40)]
     public class RemoteUpdateApplication : ListViewItem, IApplication
     {
+        [ApplicationAdapterHandler]
+        public FileTransportAdapterHandler FileTransportAdapterHandler { get; set; }
+
         public void ContinueTask(ApplicationBaseAdapterHandler handler)
         {
-            throw new NotImplementedException();
+
         }
 
         public void SessionClose(ApplicationBaseAdapterHandler handler)
         {
-            throw new NotImplementedException();
+
         }
 
         public void SetParameter(object arg)
         {
-            throw new NotImplementedException();
+
         }
 
         public void Start()
         {
-            throw new NotImplementedException();
+            this.Text = FileTransportAdapterHandler.OriginName;
+            FileTransportAdapterHandler.TransportProgressEventHandler += FileTransportAdapterHandler_TransportProgressEventHandler;
+        }
+
+        private void FileTransportAdapterHandler_TransportProgressEventHandler(FileTransportAdapterHandler sender, string fileName, long sendBytesCount, long ContentTotalCount)
+        {
+            this.SubItems.Add((sendBytesCount / (float)ContentTotalCount * 100F).ToString());
         }
     }
 }

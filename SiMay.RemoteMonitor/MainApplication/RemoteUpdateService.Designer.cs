@@ -1,6 +1,6 @@
 ﻿namespace SiMay.RemoteMonitor.MainApplication
 {
-    partial class RemoteUpdateServiceForm
+    partial class RemoteUpdateService
     {
         /// <summary>
         /// Required designer variable.

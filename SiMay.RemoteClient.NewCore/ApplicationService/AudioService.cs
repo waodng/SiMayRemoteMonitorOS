@@ -7,7 +7,7 @@ using SiMay.Platform.Windows;
 namespace SiMay.Service.Core
 {
     [ServiceName("远程语音")]
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_AUDIO)]
+    [ApplicationKey(ApplicationKeyConstant.REMOTE_AUDIO)]
     public class AudioService : ApplicationRemoteService
     {
         private bool _isRun = true;

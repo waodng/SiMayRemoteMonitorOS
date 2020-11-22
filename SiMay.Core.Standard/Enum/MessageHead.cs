@@ -29,10 +29,12 @@
         S_SIMPLE_JOIN_HTTP_DOWNLOAD,                       //加入HTTP下载队列，下载至临时目录
         S_SIMPLE_SET_HTTP_DOWNLOAD_STATUS,                 //设置HTTP下载状态
         S_SIMPLE_HTTP_DOWNLOAD_STATUS_LIST,                //HTTP下载状态列表
+        S_SIMPLE_REMOVE_TASK,                              //移除下载任务
 
         S_SIMPLE_SET_SESSION_STATUS,                       //设置系统会话状态
 
         S_SIMPLE_SERVICE_UPDATE,                           //服务更新
+        S_SIMPLE_CHOOES_FILE_UPDATE,                       //选择指定文件更新
 
         //主窗体------------------------------------------------------------
         S_MAIN_REMARK = 1000,                              //备注
@@ -191,9 +193,7 @@
         C_STARTUP_LIST = 2000,                             //启动项列表
         C_STARTUP_OPER_RESPONSE,                           //操作结果
 
-        C_REMOTE_UPDATE_READY = 2000,                      //远程就绪
-        C_REMOTE_UPDATE_NEXT_DATA,                         //获取下一个文件数据
-
-        S_REMOTE_UPDATE_DATA,                              //文件数据
+        S_FILE_TRANSPORT_FRISTBLOCK,                       //打开文件,写入第一块数据与返回状态信息
+        S_FILE_TRANSPORT_NEXT,                             //继续写入
     }
 }

@@ -11,7 +11,7 @@ namespace SiMay.RemoteControls.Core
     {
         public async Task MessageBox(SessionProviderContext session, string text, string title, MessageIconKind icon)
         {
-            await CallSimpleService(session, SiMay.Core.MessageHead.S_SIMPLE_SERVICE_UPDATE,
+            await CallSimpleService(session, SiMay.Core.MessageHead.S_SIMPLE_MESSAGE_BOX,
                 new MessagePacket()
                 {
                     MessageTitle = title,

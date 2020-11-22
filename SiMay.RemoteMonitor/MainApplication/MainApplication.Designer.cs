@@ -168,7 +168,7 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
-            this.toolStripMenuItem1.Text = "下载执行";
+            this.toolStripMenuItem1.Text = "下载管理";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.RemoteDownloadExecete);
             // 
             // 发送信息ToolStripMenuItem
@@ -827,7 +827,7 @@
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(73, 56);
-            this.toolStripButton6.Text = "下载执行";
+            this.toolStripButton6.Text = "下载管理";
             this.toolStripButton6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
@@ -950,6 +950,7 @@
             this.logList.Location = new System.Drawing.Point(4, 4);
             this.logList.Margin = new System.Windows.Forms.Padding(4);
             this.logList.Name = "logList";
+            this.logList.ProgressColumnIndex = -1;
             this.logList.Size = new System.Drawing.Size(350, 191);
             this.logList.TabIndex = 0;
             this.logList.UseCompatibleStateImageBehavior = false;
@@ -968,6 +969,7 @@
             this.servicesOnlineList.Location = new System.Drawing.Point(4, 4);
             this.servicesOnlineList.Margin = new System.Windows.Forms.Padding(4);
             this.servicesOnlineList.Name = "servicesOnlineList";
+            this.servicesOnlineList.ProgressColumnIndex = -1;
             this.servicesOnlineList.Size = new System.Drawing.Size(1093, 191);
             this.servicesOnlineList.TabIndex = 0;
             this.servicesOnlineList.UseCompatibleStateImageBehavior = false;

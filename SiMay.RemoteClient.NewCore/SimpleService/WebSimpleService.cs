@@ -30,9 +30,21 @@ namespace SiMay.Service.Core
                 FileName = targetPath,
             };
             var web = new WebClient();
+            //var responseStream = await web.OpenReadTaskAsync(new Uri(downTask.Url));
+
             web.DownloadProgressChanged += Web_DownloadProgressChanged;
+            web.DownloadFileCompleted += Web_DownloadFileCompleted;
             web.DownloadFileAsync(new Uri(downTask.Url), targetPath, context);
             return _downloadContexts[context.Id] = context;
+        }
+
+        private void Web_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            var context = e.UserState as HttpDownloadTaskItemContext;
+            if (e.Error.IsNull())
+                context.Status = 2;
+            else
+                context.Status = 1;
         }
 
         private void Web_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -42,7 +54,7 @@ namespace SiMay.Service.Core
             context.BytesReceived = e.BytesReceived;
 
             if (context.Status == 1)
-                sender.ConvertTo<WebClient>().Dispose();//任务停止
+                sender.ConvertTo<WebClient>().CancelAsync();//任务停止
         }
 
         [PacketHandler(MessageHead.S_SIMPLE_SET_HTTP_DOWNLOAD_STATUS)]
@@ -60,5 +72,18 @@ namespace SiMay.Service.Core
                 httpDownloadTaskItemContexts = _downloadContexts.Values.ToArray()
             };
         }
+
+        [PacketHandler(MessageHead.S_SIMPLE_REMOVE_TASK)]
+        public void RemoveTask(SessionProviderContext session)
+        {
+            var id = int.Parse(session.GetMessage().ToUnicodeString());
+
+            if (_downloadContexts.ContainsKey(id) && _downloadContexts[id].Status != 0)
+            {
+                File.Delete(_downloadContexts[id].FileName);
+                _downloadContexts.Remove(id);
+            }
+        }
+
     }
 }

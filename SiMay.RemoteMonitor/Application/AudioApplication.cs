@@ -123,9 +123,9 @@ namespace SiMay.RemoteMonitor.Application
 
         private async void Initialize()
         {
-            _samplesPerSecond = AppConfiguration.AudioSamplesPerSecond;
-            _bitsPerSample = (short)AppConfiguration.AudioBitsPerSample;
-            _channels = (short)AppConfiguration.AudioChannels;
+            _samplesPerSecond = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioSamplesPerSecond;
+            _bitsPerSample = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioBitsPerSample;
+            _channels = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioChannels;
             _dataBufferSize = 1280;
 
             string waveOutDeviceName = WinSound.GetWaveOutDeviceNames().Count > 0 ? WinSound.GetWaveOutDeviceNames()[0] : null;

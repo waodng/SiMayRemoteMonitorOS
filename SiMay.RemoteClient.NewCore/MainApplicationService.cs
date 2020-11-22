@@ -2,17 +2,10 @@
 using SiMay.Core;
 using SiMay.ModelBinder;
 using SiMay.Net.SessionProvider;
-using SiMay.Net.SessionProvider.Providers;
 using SiMay.Platform.Windows.Helper;
 using SiMay.RemoteService.Loader;
-using SiMay.Sockets.Tcp;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
 
 namespace SiMay.Service.Core
 {
@@ -58,36 +51,23 @@ namespace SiMay.Service.Core
         [PacketHandler(MessageHead.S_GLOBAL_OK)]
         public void SendLoginPack(SessionProviderContext session)
         {
-            var loginResult = LoginPacketBuilder();
-            session.SendTo(MessageHead.C_MAIN_LOGIN, loginResult);
-        }
-
-        private LoginPacket LoginPacketBuilder(bool assemblyLoadCompleted = false)
-        {
-            string remarkInfomation = AppConfiguartion.RemarkInfomation ?? AppConfiguartion.DefaultRemarkInfo;
-            string groupName = AppConfiguartion.GroupName ?? AppConfiguartion.DefaultGroupName;
-            bool openScreenView = AppConfiguartion.IsOpenScreenView;//默认为打开屏幕墙
-
             var loginPack = new LoginPacket();
             loginPack.IPV4 = GetSystemInforHelper.GetLocalIPv4();
             loginPack.MachineName = Environment.MachineName ?? string.Empty;
-            loginPack.Remark = remarkInfomation;
+            loginPack.Describe = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Describe;
             loginPack.ProcessorCount = Environment.ProcessorCount;
             loginPack.ProcessorInfo = GetSystemInforHelper.GetMyCpuInfo;
             loginPack.MemorySize = GetSystemInforHelper.GetMyMemorySize;
-            loginPack.StartRunTime = AppConfiguartion.RunTime;
-            loginPack.ServiceVison = AppConfiguartion.Version;
+            loginPack.RunTime = StartParameter.RunTime;
+            loginPack.ServiceVison = StartParameter.Version;
             loginPack.UserName = Environment.UserName.ToString();
             loginPack.OSVersion = GetSystemInforHelper.GetOSFullName;
-            loginPack.GroupName = groupName;
-            loginPack.OpenScreenView = openScreenView;
+            loginPack.GroupName = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().GroupName;
             loginPack.ExistCameraDevice = GetSystemInforHelper.ExistCameraDevice();
             loginPack.ExitsRecordDevice = GetSystemInforHelper.ExistRecordDevice();
             loginPack.ExitsPlayerDevice = GetSystemInforHelper.ExistPlayDevice();
-            loginPack.IdentifyId = AppConfiguartion.IdentifyId;
-            loginPack.InitialAssemblyLoad = assemblyLoadCompleted;
-
-            return loginPack;
+            loginPack.IdentifyId = StartParameter.IdentifyId;
+            session.SendTo(MessageHead.C_MAIN_LOGIN, loginPack);
         }
     }
 }

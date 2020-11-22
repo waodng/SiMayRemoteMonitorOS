@@ -14,9 +14,9 @@ using System.Windows.Forms;
 
 namespace SiMay.RemoteMonitor.MainApplication
 {
-    public partial class RemoteUpdateServiceForm : Form
+    public partial class RemoteUpdateService : Form
     {
-        public RemoteUpdateServiceForm()
+        public RemoteUpdateService()
         {
             InitializeComponent();
             this.DialogResult = DialogResult.Cancel;

@@ -41,10 +41,10 @@ namespace SiMay.Service.Core
             session.SendTo(MessageHead.C_MAIN_ACTIVE_APP,
                 new ActivateApplicationPack()
                 {
-                    IdentifyId = AppConfiguartion.IdentifyId,
+                    IdentifyId = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.IdentifyId,
                     ApplicationKey = this.ApplicationKey,
                     ActivatedCommandText = this.ActivatedCommandText,
-                    OriginName = Environment.MachineName + "@" + (AppConfiguartion.RemarkInfomation ?? AppConfiguartion.DefaultRemarkInfo)
+                    OriginName = Environment.MachineName + "@" + AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Describe
                 });
             this.SessionInited(session);
         }

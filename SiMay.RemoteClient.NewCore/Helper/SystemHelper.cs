@@ -118,7 +118,7 @@ namespace SiMay.Service.Core
             var svcFullName = Assembly.GetExecutingAssembly().Location;
             var parameter = " \"-serviceStart\"";//服务启动标志
             svcFullName += parameter;
-            if (ServiceInstallerHelper.InstallService(svcFullName, AppConfiguartion.ServiceName, AppConfiguartion.ServiceDisplayName))
+            if (ServiceInstallerHelper.InstallService(svcFullName, AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceName, AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceDisplayName))
             {
                 Platform.Windows.Helper.SystemMessageNotify.ShowTip("SiMay远程控制被控服务安装完成!");
                 //服务安装完成启动成功
@@ -134,7 +134,7 @@ namespace SiMay.Service.Core
         public static void UnInstallAutoStartService()
         {
             SystemMessageNotify.ShowTip("SiMay远程控制服务正在卸载自启动服务!");
-            if (ServiceInstallerHelper.UnInstallService(AppConfiguartion.ServiceName))
+            if (ServiceInstallerHelper.UnInstallService(AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceName))
                 Environment.Exit(0);
             else
             {

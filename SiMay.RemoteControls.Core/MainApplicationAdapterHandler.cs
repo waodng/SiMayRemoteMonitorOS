@@ -74,14 +74,15 @@ namespace SiMay.RemoteControls.Core
         /// </summary>
         bool _launch;
 
-        public MainApplicationAdapterHandler(AbstractAppConfigBase config)
+        public MainApplicationAdapterHandler(AppConfiguration config)
         {
             if (_launch)
                 return;
 
             _launch = true;
 
-            AppConfiguration.SysConfig = config;
+            AppConfigurationHelper<AppConfiguration>.SetOption(config);
+
             TaskScheduleTrigger.StarSchedule(10);
 
             //注册简单应用
@@ -101,28 +102,25 @@ namespace SiMay.RemoteControls.Core
         /// </summary>
         public void StartApp()
         {
-            var providerType = int.Parse(AppConfiguration.SessionMode).ConvertTo<SessionProviderType>();
+            var providerType = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().SessionMode.ConvertTo<SessionProviderType>();
 
             string ip = providerType == SessionProviderType.TcpServiceSession
-                ? AppConfiguration.IPAddress
-                : AppConfiguration.ServiceIPAddress;
+                ? AppConfiguration.GetApplicationConfiguration<AppConfiguration>().IPAddress
+                : AppConfiguration.GetApplicationConfiguration<AppConfiguration>().MiddlerProxyIPAddress;
 
             int port = providerType == SessionProviderType.TcpServiceSession
-                ? AppConfiguration.Port
-                : AppConfiguration.ServicePort;
+                ? AppConfiguration.GetApplicationConfiguration<AppConfiguration>().Port
+                : AppConfiguration.GetApplicationConfiguration<AppConfiguration>().MiddlerProxyPort;
 
-            AppConfiguration.UseAccessId = !AppConfiguration.EnabledAnonyMous ? AppConfiguration.AccessId : DateTime.Now.ToFileTimeUtc();
-
-            int maxConnectCount = AppConfiguration.MaxConnectCount;
+            int maxConnectCount = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().MaxConnectCount;
 
             var providerOptions = new SessionProviderOptions
             {
                 ServiceIPEndPoint = new IPEndPoint(IPAddress.Parse(ip), port),
                 PendingConnectionBacklog = maxConnectCount,
-                AccessId = AppConfiguration.UseAccessId,//暂时使用UTC时间作为主控端标识
-                MainAppAccessKey = AppConfiguration.MainAppAccessKey,
+                AccessId = !AppConfiguration.GetApplicationConfiguration<AppConfiguration>().EnabledAnonyMous ? AppConfiguration.GetApplicationConfiguration<AppConfiguration>().AccessId : DateTime.Now.ToFileTimeUtc(),//暂时使用UTC时间作为主控端标识
+                AccessKey = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().AccessKey,
                 MaxPacketSize = 1024 * 1024 * 2,
-                AccessKey = long.Parse(AppConfiguration.AccessKey),
                 SessionProviderType = providerType
             };
 
@@ -290,7 +288,7 @@ namespace SiMay.RemoteControls.Core
         {
             var ack = session.GetMessageEntity<AcknowledPacket>();
             long accessKey = ack.AccessKey;
-            if (accessKey != int.Parse(AppConfiguration.ConnectPassWord))
+            if (accessKey != int.Parse(AppConfiguration.GetApplicationConfiguration<AppConfiguration>().ValidatePassWord))
             {
                 session.SessionClose();
                 return;
@@ -440,11 +438,11 @@ namespace SiMay.RemoteControls.Core
         {
             syncContext[SysConstants.IPV4] = login.IPV4;
             syncContext[SysConstants.MachineName] = login.MachineName;
-            syncContext[SysConstants.Remark] = login.Remark;
+            syncContext[SysConstants.Remark] = login.Describe;
             syncContext[SysConstants.ProcessorInfo] = login.ProcessorInfo;
             syncContext[SysConstants.ProcessorCount] = login.ProcessorCount;
             syncContext[SysConstants.MemorySize] = login.MemorySize;
-            syncContext[SysConstants.StartRunTime] = login.StartRunTime;
+            syncContext[SysConstants.StartRunTime] = login.RunTime;
             syncContext[SysConstants.ServiceVison] = login.ServiceVison;
             syncContext[SysConstants.UserName] = login.UserName;
             syncContext[SysConstants.OSVersion] = login.OSVersion;
@@ -475,11 +473,11 @@ namespace SiMay.RemoteControls.Core
                 {
                     { SysConstants.IPV4, login.IPV4 },
                     { SysConstants.MachineName, login.MachineName },
-                    { SysConstants.Remark, login.Remark },
+                    { SysConstants.Remark, login.Describe },
                     { SysConstants.ProcessorInfo, login.ProcessorInfo },
                     { SysConstants.ProcessorCount, login.ProcessorCount },
                     { SysConstants.MemorySize, login.MemorySize },
-                    { SysConstants.StartRunTime, login.StartRunTime },
+                    { SysConstants.StartRunTime, login.RunTime },
                     { SysConstants.ServiceVison, login.ServiceVison },
                     { SysConstants.UserName, login.UserName },
                     { SysConstants.OSVersion, login.OSVersion },
@@ -487,7 +485,7 @@ namespace SiMay.RemoteControls.Core
                     { SysConstants.ExistCameraDevice, login.ExistCameraDevice },
                     { SysConstants.ExitsRecordDevice, login.ExitsRecordDevice },
                     { SysConstants.ExitsPlayerDevice, login.ExitsPlayerDevice },
-                    { SysConstants.IdentifyId, login.IdentifyId }
+                    { SysConstants.IdentifyId, login.IdentifyId },
                 };
                 var syncContext = new SessionSyncContext(session, dictions);
                 session.AppTokens[SysConstants.INDEX_WORKER] = syncContext;

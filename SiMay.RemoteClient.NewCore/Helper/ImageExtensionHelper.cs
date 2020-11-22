@@ -9,7 +9,7 @@ namespace SiMay.Service.Core
     public class ImageExtensionHelper
     {
         static ICapturer _capturer = new BitBltCapture(false);
-        static bool _hasSystemAuthor = AppConfiguartion.SystemPermission;
+        static bool _hasSystemAuthor = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.SystemPermission;
         public static byte[] CaptureNoCursorToBytes(Size size)
         {
             if (_hasSystemAuthor)

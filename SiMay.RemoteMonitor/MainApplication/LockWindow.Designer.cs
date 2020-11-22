@@ -1,6 +1,6 @@
 ﻿namespace SiMay.RemoteMonitor.MainApplication
 {
-    partial class LockWindowsForm
+    partial class LockWindow
     {
         /// <summary>
         /// Required designer variable.

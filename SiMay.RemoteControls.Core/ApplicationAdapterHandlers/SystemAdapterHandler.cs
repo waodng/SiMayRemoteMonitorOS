@@ -10,7 +10,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationServiceKey(ApplicationKeyConstant.REMOTE_SYSMANAGER)]
+    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_SYSMANAGER)]
     public class SystemAdapterHandler : ApplicationBaseAdapterHandler
     {
         public async Task<SystemInfoItem[]> GetSystemInfoItems()

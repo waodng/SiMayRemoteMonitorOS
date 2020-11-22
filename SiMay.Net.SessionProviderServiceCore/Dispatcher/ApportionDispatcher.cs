@@ -82,7 +82,7 @@ namespace SiMay.Net.SessionProviderServiceCore
         {
             if (type == ConnectionWorkType.MainApplicationConnection && ApplicationConfiguartion.Options.MainApplicationAnonyMous)
                 return key.Equals(ApplicationConfiguartion.Options.MainAppAccessKey);//主控端允许匿名Id登陆
-            else if (type == ConnectionWorkType.MainApplicationConnection && !ApplicationConfiguartion.Options.MainApplicationAnonyMous)
+            else if ((type == ConnectionWorkType.MainApplicationConnection || type == ConnectionWorkType.ApplicationConnection) && !ApplicationConfiguartion.Options.MainApplicationAnonyMous)
                 return ApplicationConfiguartion.Options.MainApplicationAllowAccessId.Contains(id) && ApplicationConfiguartion.Options.MainAppAccessKey.Equals(key);
             else
             {

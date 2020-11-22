@@ -6,7 +6,6 @@ namespace SiMay.Service.Core
 
     public class AppConfigRegValueHelper
     {
-
         public static bool SetValue(string node, string value)
         {
             bool result = true;

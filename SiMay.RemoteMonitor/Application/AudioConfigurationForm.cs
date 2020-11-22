@@ -1,4 +1,5 @@
-﻿using SiMay.RemoteControls.Core;
+﻿using SiMay.Core;
+using SiMay.RemoteControls.Core;
 using SiMay.RemoteMonitor.Attributes;
 using System;
 using System.Collections.Generic;
@@ -20,18 +21,18 @@ namespace SiMay.RemoteMonitor.Application
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AppConfiguration.AudioSamplesPerSecond = int.Parse(nSamplesPerSec.Text);
-            AppConfiguration.AudioBitsPerSample = int.Parse(wBitsPerSample.Text);
-            AppConfiguration.AudioChannels = int.Parse(nChannels.Text);
+            AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioSamplesPerSecond = short.Parse(nSamplesPerSec.Text);
+            AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioBitsPerSample = short.Parse(wBitsPerSample.Text);
+            AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioChannels = short.Parse(nChannels.Text);
             MessageBox.Show("设置保存成功,但设置需重新打开语音功能模块后才能生效。", "提示", 0, MessageBoxIcon.Exclamation);
             this.Close();
         }
 
         private void AudioConfigurationManager_Load(object sender, EventArgs e)
         {
-            nSamplesPerSec.Text = AppConfiguration.AudioSamplesPerSecond.ToString();
-            wBitsPerSample.Text = AppConfiguration.AudioBitsPerSample.ToString();
-            nChannels.Text = AppConfiguration.AudioChannels.ToString();
+            nSamplesPerSec.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioSamplesPerSecond.ToString();
+            wBitsPerSample.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioBitsPerSample.ToString();
+            nChannels.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().AudioChannels.ToString();
         }
     }
 }
