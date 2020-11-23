@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SiMay.Core
 {
+    /// <summary>
+    /// 应用关系关联常量
+    /// </summary>
     public class ApplicationKeyConstant
     {
         public const string REMOTE_DESKTOP = "RemoteDesktopJob";

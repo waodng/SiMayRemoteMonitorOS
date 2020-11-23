@@ -39,6 +39,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         private System.Timers.Timer _flowCalcTimer;
         private System.Timers.Timer _viewCarouselTimer;
         private DesktopViewSettingContext _viewCarouselContext = new DesktopViewSettingContext();
+        private RemoteUpdateService _remoteUpdateServiceDialog = new RemoteUpdateService();
         private Color _closeScreenColor = Color.FromArgb(127, 175, 219);
         private ImageList _imgList;
 
@@ -55,7 +56,8 @@ namespace SiMay.RemoteMonitor.MainApplication
                 .ApplicationRegister<StartupApplication>()
                 .ApplicationRegister<SystemApplication>()
                 .ApplicationRegister<TcpConnectionApplication>()
-                .ApplicationRegister<VideoApplication>();
+                .ApplicationRegister<VideoApplication>()
+                .ApplicationRegister<RemoteUpdateApplication>();
 
             var config = File.Exists(SysConstantsExtend.ConfigPath) ? JsonConvert.DeserializeObject<SystemAppConfig>(File.ReadAllText(SysConstantsExtend.ConfigPath)) : new SystemAppConfig();
             AppConfiguration.SetOption(config);
@@ -271,6 +273,10 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private bool OnApplicationCreatedEventHandler(IApplication app)
         {
+            //远程更新窗口
+            if (app is RemoteUpdateApplication)
+                app.SetParameter(_remoteUpdateServiceDialog.updateList);
+
             return true;
         }
 
@@ -918,16 +924,13 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void UpdateClient_Click(object sender, EventArgs e)
         {
-            using (var dlg = new RemoteUpdateService())
+            var appKeys = typeof(RemoteUpdateApplication).GetActivateApplicationKey();
+            this.GetSelectedListItem().ForEach(c =>
             {
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    this.GetSelectedListItem().ForEach(async c =>
-                    {
-                        await this._appMainAdapterHandler.SimpleApplicationCollection.GetSimpleApplication<ExecuteFileUpdateSimpleApplication>().UpdateService(c.SessionSyncContext.Session, dlg.UrlOrFileUpdate, File.ReadAllBytes(dlg.Value), dlg.Value);
-                    });
-                }
-            }
+                foreach (var key in appKeys)
+                    this._appMainAdapterHandler.RemoteActivateService(c.SessionSyncContext, key);
+            });
+            _remoteUpdateServiceDialog.ShowDialog();
         }
 
         private void ToolStripMenuItem8_Click(object sender, EventArgs e)

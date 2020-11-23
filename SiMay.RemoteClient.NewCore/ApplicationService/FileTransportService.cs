@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SiMay.Core;
 using SiMay.ModelBinder;
 using SiMay.Net.SessionProvider;
+using System.Windows.Forms;
 
 namespace SiMay.Service.Core
 {
@@ -91,7 +92,7 @@ namespace SiMay.Service.Core
 
         private string GetTempFilePath(string extension)
         {
-            var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location == string.Empty ? Application.ExecutablePath : Assembly.GetExecutingAssembly().Location);
             string tempFilePath;
             do
             {

@@ -19,13 +19,12 @@ namespace SiMay.RemoteMonitor.MainApplication
         public RemoteUpdateService()
         {
             InitializeComponent();
-            this.DialogResult = DialogResult.Cancel;
         }
 
-        public RemoteUpdateKind UrlOrFileUpdate { get; set; }
-        public string Value { get; set; }
-        private void BtnUpdate_Click(object sender, EventArgs e)
+        bool _cancel;
+        private async void BtnUpdate_Click(object sender, EventArgs e)
         {
+            _cancel = false;
             if (radioLocalFile.Checked)
             {
                 if (!File.Exists(txtPath.Text))
@@ -33,31 +32,24 @@ namespace SiMay.RemoteMonitor.MainApplication
                     MessageBoxHelper.ShowBoxError("请选择正确的文件路径!");
                     return;
                 }
-                //if (new FileInfo(txtPath.Text).Length > 1024 * 1024)
-                //{
-                //    MessageBoxHelper.ShowBoxError("文件大于1M!");
-                //    return;
-                //}
-                Value = txtPath.Text;
-                UrlOrFileUpdate =  RemoteUpdateKind.File;
             }
-            else
+
+            if (MessageBox.Show("该操作是危险操作，请确认文件是否正确，否则可能导致上线失败!", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
-
-                Value = txtURL.Text;
-                UrlOrFileUpdate = RemoteUpdateKind.Url;
+                while (!_cancel)
+                {
+                    foreach (RemoteUpdateApplication app in updateList.Items)
+                    {
+                        if (app.StatuCode == 0)
+                            await app.StartUpdate(txtPath.Text);
+                    }
+                    await Task.Delay(500);
+                }
             }
-
-            if (MessageBox.Show("该操作是危险操作，请确认文件或URL是否正确，否则可能导致上线失败!", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
-                this.DialogResult = DialogResult.OK;
-            else
-                return;
-
-            this.Close();
         }
+
         private void Button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
@@ -72,6 +64,23 @@ namespace SiMay.RemoteMonitor.MainApplication
                     txtPath.Text = Path.Combine(ofd.InitialDirectory, ofd.FileName);
                 }
             }
+        }
+
+        private void RemoteUpdateService_Load(object sender, EventArgs e)
+        {
+            this.updateList.ProgressColumnIndex = 1;
+            this.updateList.OwnerDraw = true;
+        }
+
+        private void RemoteUpdateService_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (RemoteUpdateApplication app in updateList.Items)
+            {
+                if (app.StatuCode == 0)
+                    app.FileTransportAdapterHandler.CloseSession();
+            }
+            _cancel = true;
+            updateList.Items.Clear();
         }
     }
 }

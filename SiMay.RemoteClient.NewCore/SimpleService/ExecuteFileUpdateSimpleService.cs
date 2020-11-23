@@ -102,7 +102,7 @@ namespace SiMay.Service.Core
 
         private string GetTempFilePath(string extension)
         {
-            var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location == string.Empty ? Application.ExecutablePath : Assembly.GetExecutingAssembly().Location);
             string tempFilePath;
             do
             {

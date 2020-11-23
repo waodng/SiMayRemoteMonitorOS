@@ -20,7 +20,7 @@ namespace SiMay.RemoteControls.Core
         /// <summary>
         /// 当前会话对象
         /// </summary>
-        protected SessionProviderContext CurrentSession { get; set; }
+        public SessionProviderContext CurrentSession { get; set; }
 
         /// <summary>
         /// 简单程序集合

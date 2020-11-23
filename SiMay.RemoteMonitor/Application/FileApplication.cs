@@ -1061,5 +1061,10 @@ namespace SiMay.RemoteMonitor.Application
             if (e.KeyChar == 13)
                 this.RemoteFileAdapterHandler.GetRemoteFiles(txtRemotedirectory.Text);
         }
+
+        private void uploadMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -84,7 +84,7 @@ namespace SiMay.RemoteService.Loader
                     AutoStart = false,
                     SessionMode = 0,
                     AccessKey = 5200,
-                    Version = "正式5.0",
+                    Version = "V6.1.02",
                     RunTime = DateTime.Now,
                     IdentifyId = "AAAAAAAAAAAAAAA11111111"
                 };

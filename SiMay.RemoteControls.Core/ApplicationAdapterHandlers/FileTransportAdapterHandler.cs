@@ -15,7 +15,7 @@ namespace SiMay.RemoteControls.Core
     {
         public event Action<FileTransportAdapterHandler, string, long, long> TransportProgressEventHandler;
 
-        public async Task<(bool successed, string path)> StartTransport(IStream stream, string fileName)
+        public async Task<(bool successed, string path)> StartTransport(IStream stream)
         {
             var filePath = string.Empty;
             var buffer = new byte[1024 * 512];

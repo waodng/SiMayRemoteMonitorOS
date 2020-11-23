@@ -19,5 +19,10 @@ namespace SiMay.RemoteControls.Core
                     FileData = updateType == RemoteUpdateKind.File ? file : new byte[0]
                 });
         }
+
+        public async Task ChooseUpdateService(SessionProviderContext session, string fileName)
+        {
+            await CallSimpleService(session, SiMay.Core.MessageHead.S_SIMPLE_CHOOES_FILE_UPDATE, fileName);
+        }
     }
 }
