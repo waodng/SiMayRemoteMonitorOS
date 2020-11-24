@@ -9,6 +9,7 @@ using static SiMay.Platform.Windows.CommonWin32Api;
 using SiMay.ModelBinder;
 using SiMay.RemoteService.Loader;
 using SiMay.Net.SessionProvider;
+using System;
 
 namespace SiMay.Service.Core
 {
@@ -84,11 +85,31 @@ namespace SiMay.Service.Core
         public void SendDesktopBitInfo(SessionProviderContext session)
             => SendDesktopInitInfo();
 
+        Size GetDPIXY
+        {
+            get
+            {
+
+                int x;
+                int y;
+                using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+                {
+                    x = (int)g.DpiX;
+                    y = (int)g.DpiY;
+                    g.Dispose();
+                }
+
+                return new Size(x, y);
+            }
+        }
+
         private void SendDesktopInitInfo()
         {
             CurrentSession.SendTo(MessageHead.C_SCREEN_BITINFO,
                new ScreenInitBitPacket()
                {
+                   DpiX = GetDPIXY.Width,
+                   DpiY = GetDPIXY.Height,
                    Height = _spy.ScreenHeight,
                    Width = _spy.ScreenWidth,
                    PrimaryScreenIndex = _spy.Capturer.SelectedScreen,

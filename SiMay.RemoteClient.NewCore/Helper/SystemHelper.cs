@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using SiMay.Basic;
 using SiMay.Core;
 using SiMay.Platform.Windows;
 using SiMay.Platform.Windows.Helper;
@@ -56,7 +57,7 @@ namespace SiMay.Service.Core
         public const int INSTALL_SYS_SERVICE = 7;
 
         /// <summary>
-        /// 卸载服务
+        /// 卸载启动服务
         /// </summary>
         public const int UNINSTALL_SYS_SERVICE = 8;
 
@@ -115,7 +116,7 @@ namespace SiMay.Service.Core
         public static void InstallAutoStartService()
         {
             Platform.Windows.Helper.SystemMessageNotify.ShowTip("SiMay远程控制被控服务正在安装服务!");
-            var svcFullName = Assembly.GetExecutingAssembly().Location;
+            var svcFullName = Assembly.GetExecutingAssembly().Location.IsNullOrEmpty() ? Application.ExecutablePath : Assembly.GetExecutingAssembly().Location;
             var parameter = " \"-serviceStart\"";//服务启动标志
             svcFullName += parameter;
             if (ServiceInstallerHelper.InstallService(svcFullName, AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceName, AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceDisplayName))

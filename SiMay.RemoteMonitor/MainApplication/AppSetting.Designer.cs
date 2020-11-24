@@ -45,8 +45,6 @@
             this.enableAnonymous = new System.Windows.Forms.CheckBox();
             this.txtAccessId = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.txtMainAppAccessKey = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.txtservice_port = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -203,8 +201,6 @@
             this.panel2.Controls.Add(this.enableAnonymous);
             this.panel2.Controls.Add(this.txtAccessId);
             this.panel2.Controls.Add(this.label16);
-            this.panel2.Controls.Add(this.txtMainAppAccessKey);
-            this.panel2.Controls.Add(this.label15);
             this.panel2.Controls.Add(this.label13);
             this.panel2.Controls.Add(this.txtservice_port);
             this.panel2.Controls.Add(this.label12);
@@ -262,24 +258,6 @@
             this.label16.Size = new System.Drawing.Size(79, 15);
             this.label16.TabIndex = 43;
             this.label16.Text = "AccessId:";
-            // 
-            // txtMainAppAccessKey
-            // 
-            this.txtMainAppAccessKey.Location = new System.Drawing.Point(247, 503);
-            this.txtMainAppAccessKey.Margin = new System.Windows.Forms.Padding(4);
-            this.txtMainAppAccessKey.Name = "txtMainAppAccessKey";
-            this.txtMainAppAccessKey.Size = new System.Drawing.Size(152, 25);
-            this.txtMainAppAccessKey.TabIndex = 42;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(96, 506);
-            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(143, 15);
-            this.label15.TabIndex = 41;
-            this.label15.Text = "MainAppAccessKey:";
             // 
             // label13
             // 
@@ -442,7 +420,7 @@
             this.panel1.Size = new System.Drawing.Size(671, 375);
             this.panel1.TabIndex = 29;
             // 
-            // AppSettingForm
+            // AppSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -452,7 +430,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
-            this.Name = "AppSettingForm";
+            this.Name = "AppSetting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "系统设置";
             this.Load += new System.EventHandler(this.SetForm_Load);
@@ -500,7 +478,5 @@
         private System.Windows.Forms.CheckBox enableAnonymous;
         private System.Windows.Forms.TextBox txtAccessId;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox txtMainAppAccessKey;
-        private System.Windows.Forms.Label label15;
     }
 }

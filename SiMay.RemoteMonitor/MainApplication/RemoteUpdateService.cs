@@ -74,13 +74,18 @@ namespace SiMay.RemoteMonitor.MainApplication
 
         private void RemoteUpdateService_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (RemoteUpdateApplication app in updateList.Items)
+            if (MessageBox.Show("退出会使正在传输或等待分配的任务中断，确定退出吗?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
-                if (app.StatuCode == 0)
-                    app.FileTransportAdapterHandler.CloseSession();
+                foreach (RemoteUpdateApplication app in updateList.Items)
+                {
+                    if (app.StatuCode == 0 && !app.FileTransportAdapterHandler.IsManualClose())
+                        app.FileTransportAdapterHandler.CloseSession();
+                }
+                _cancel = true;
+                updateList.Items.Clear();
             }
-            _cancel = true;
-            updateList.Items.Clear();
+            else
+                e.Cancel = true;
         }
     }
 }

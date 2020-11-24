@@ -75,7 +75,11 @@ namespace SiMay.Net.SessionProvider
                     var proxyConnectionContext = new TcpProxyApplicationConnectionContext();
                     proxyConnectionContext.DataReceivedEventHandler += HandleOnDataReceived;
                     proxyConnectionContext.DataSendEventHandler += HandleOnDataSend;
-                    proxyConnectionContext.SetSession(_currentSession, session.Id, session.ACKPacketData);
+
+                    var waitDecompressData = ProxyProtocolConstructionHelper.TakeHeadAndMessage(session.ACKPacketData);
+                    var decompressData = GZipHelper.Decompress(waitDecompressData);
+
+                    proxyConnectionContext.SetSession(_currentSession, session.Id, decompressData);
                     this._proxySessions.Add(session.Id, proxyConnectionContext);
                     this.SessionNotifyEventHandler?.Invoke(proxyConnectionContext, TcpSessionNotify.OnConnected);
                     this.SessionNotifyEventHandler?.Invoke(proxyConnectionContext, TcpSessionNotify.OnDataReceived);

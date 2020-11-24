@@ -38,7 +38,7 @@ namespace SiMay.Net.SessionProvider.Providers
                     case TcpSessionNotify.OnDataReceiveing:
 
                         var sessionProviderContext = session.AppTokens.First().ConvertTo<TcpClientSessionContext>();
-                        sessionProviderContext.OnMessage();
+                        sessionProviderContext.OnProcess();
 
                         this.Notification(sessionProviderContext, TcpSessionNotify.OnDataReceiveing);
                         break;
@@ -46,7 +46,10 @@ namespace SiMay.Net.SessionProvider.Providers
                         this.Notification(session.AppTokens.First().ConvertTo<SessionProviderContext>(), TcpSessionNotify.OnDataReceived);
                         break;
                     case TcpSessionNotify.OnClosed:
-                        this.Notification(session.AppTokens.First().ConvertTo<SessionProviderContext>(), TcpSessionNotify.OnClosed);
+                        if (!session.AppTokens.IsNull())
+                            this.Notification(session.AppTokens.First().ConvertTo<SessionProviderContext>(), TcpSessionNotify.OnClosed);
+                        else
+                            this.Notification(null, TcpSessionNotify.OnClosed);
                         break;
                     default:
                         break;

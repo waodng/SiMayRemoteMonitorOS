@@ -12,9 +12,9 @@
         S_GLOBAL_PLUGIN,                                   //插件文件
         S_GLOBAL_SYNC_CALL,                                //同步调用
         S_GLOBAL_SIMPLEAPP_SYNC_CALL,                      //简单应用同步调用
+        C_GLOBAL_SYNC_RESULT,                              //同步调用结果
 
         C_GLOBAL_CONNECT = 1000,                           //连接确认包，带连接密码
-        C_GLOBAL_SYNC_RESULT,                              //同步调用结果
 
         //简单程序
         S_SIMPLE_DES = 1000,                            //备注

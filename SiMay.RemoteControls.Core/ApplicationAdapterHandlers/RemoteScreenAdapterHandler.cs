@@ -12,6 +12,7 @@ using SiMay.Platform.Windows;
 using SiMay.RemoteControls.Core.Enum;
 using SiMay.ModelBinder;
 using static SiMay.Serialize.Standard.PacketSerializeHelper;
+using System.Drawing;
 
 namespace SiMay.RemoteControls.Core
 {
@@ -22,7 +23,7 @@ namespace SiMay.RemoteControls.Core
         /// <summary>
         /// 远程屏幕服务初始化完成
         /// </summary>
-        public event Action<RemoteScreenAdapterHandler, int, int, int, MonitorItem[]> OnServcieInitEventHandler;
+        public event Action<RemoteScreenAdapterHandler, Size, Size, int, MonitorItem[]> OnServcieInitEventHandler;
 
         /// <summary>
         /// 获取剪切板
@@ -56,7 +57,7 @@ namespace SiMay.RemoteControls.Core
         private void SetBitmapHandler(SessionProviderContext session)
         {
             var bitinfo = session.GetMessageEntity<ScreenInitBitPacket>();
-            this.OnServcieInitEventHandler?.Invoke(this, bitinfo.Height, bitinfo.Width, bitinfo.PrimaryScreenIndex, bitinfo.Monitors);
+            this.OnServcieInitEventHandler?.Invoke(this, new Size(bitinfo.Width, bitinfo.Height), new Size(bitinfo.DpiX, bitinfo.DpiY), bitinfo.PrimaryScreenIndex, bitinfo.Monitors);
         }
 
         [PacketHandler(MessageHead.C_SCREEN_DIFFBITMAP)]

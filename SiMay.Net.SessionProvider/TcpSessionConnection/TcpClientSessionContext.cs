@@ -45,7 +45,7 @@ namespace SiMay.Net.SessionProvider
             set => _decompressData = value;
         }
 
-        public void OnMessage()
+        public void OnProcess()
         {
             //数据到达后清除缓存数据
             _decompressData = null;

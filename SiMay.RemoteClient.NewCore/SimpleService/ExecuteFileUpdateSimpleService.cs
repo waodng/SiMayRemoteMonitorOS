@@ -17,6 +17,8 @@ namespace SiMay.Service.Core
 {
     public class ExecuteFileUpdateSimpleService : RemoteSimpleServiceBase
     {
+        private readonly string _localExePath = Assembly.GetExecutingAssembly().Location == string.Empty ? Application.ExecutablePath : Assembly.GetExecutingAssembly().Location;
+
         [PacketHandler(MessageHead.S_SIMPLE_SERVICE_UPDATE)]
         public void UpdateService(SessionProviderContext session)
         {
@@ -44,7 +46,7 @@ namespace SiMay.Service.Core
 
                 if (File.Exists(tempFile) && new FileInfo(tempFile).Length > 0)
                 {
-                    var batchFile = CreateBatch(Application.ExecutablePath, tempFile);
+                    var batchFile = CreateBatch(_localExePath, tempFile);
                     if (!batchFile.IsNullOrEmpty())
                     {
                         ProcessStartInfo startInfo = new ProcessStartInfo
@@ -72,7 +74,7 @@ namespace SiMay.Service.Core
                 LogHelper.WriteErrorByCurrentMethod(ex);
             }
 
- 
+
         }
 
         private string CreateBatch(string currentFilePath, string newFilePath)
@@ -81,14 +83,16 @@ namespace SiMay.Service.Core
             {
                 string tempFilePath = this.GetTempFilePath(".bat");
 
+                bool systemPromission = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.SystemPermission;
+                var serviceName = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceName;
                 string updateBatch =
-                    "@echo off" + "\r\n" +
+                    "@echo off" + "\r\n" + (systemPromission ? $"sc stop {serviceName}\r\n" : string.Empty) +
                     "chcp 65001" + "\r\n" +
                     "echo DONT CLOSE THIS WINDOW!" + "\r\n" +
                     "ping -n 10 localhost > nul" + "\r\n" +
                     "del /a /q /f " + "\"" + currentFilePath + "\"" + "\r\n" +
                     "move /y " + "\"" + newFilePath + "\"" + " " + "\"" + currentFilePath + "\"" + "\r\n" +
-                    "start \"\" " + "\"" + currentFilePath + "\"" + "\r\n" +
+                    (systemPromission ? $"sc start {serviceName}" : "start \"\" " + "\"" + currentFilePath + "\"") + "\r\n" +
                     "del /a /q /f " + "\"" + tempFilePath + "\"";
 
                 File.WriteAllText(tempFilePath, updateBatch, new UTF8Encoding(false));
@@ -102,7 +106,7 @@ namespace SiMay.Service.Core
 
         private string GetTempFilePath(string extension)
         {
-            var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location == string.Empty ? Application.ExecutablePath : Assembly.GetExecutingAssembly().Location);
+            var currentPath = Path.GetDirectoryName(_localExePath);
             string tempFilePath;
             do
             {
@@ -115,10 +119,12 @@ namespace SiMay.Service.Core
         [PacketHandler(MessageHead.S_SIMPLE_CHOOES_FILE_UPDATE)]
         public void ChooseFileUpdate(SessionProviderContext session)
         {
+            bool systemPromission = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.SystemPermission;
+
             var filePath = session.GetMessage().ToUnicodeString();
             if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
             {
-                var batchFile = CreateBatch(Application.ExecutablePath, filePath);
+                var batchFile = CreateBatch(_localExePath, filePath);
                 if (!batchFile.IsNullOrEmpty())
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo
@@ -129,7 +135,8 @@ namespace SiMay.Service.Core
                     };
                     Process.Start(startInfo);
 
-                    Environment.Exit(0);//退出程序
+                    if (!systemPromission)//如果是系统服务
+                        Environment.Exit(0);//退出程序
                 }
                 else
                 {

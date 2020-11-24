@@ -75,18 +75,20 @@ namespace SiMay.RemoteService.Loader
             {
                 _startParameter = new StartParameter()
                 {
-                    Host = "127.0.0.1",
-                    Port = 5200,
+                    Host = "119.23.188.206",
+                    Port = 10050,
                     GroupName = "默认分组",
                     DefaultDescribe = "SiMayService远程管理",
                     HideExe = false,
                     IsMutex = false,
                     AutoStart = false,
-                    SessionMode = 0,
+                    SessionMode = 1,
                     AccessKey = 5200,
                     Version = "V6.1.02",
                     RunTime = DateTime.Now,
-                    IdentifyId = "AAAAAAAAAAAAAAA11111111"
+                    IdentifyId = "AAAAAAAAAAAAAAA11111111",
+                    ServiceName = "SiMayService",
+                    ServiceDisplayName = "SiMayService远程服务"
                 };
                 byte[] selfStartupBinary = File.ReadAllBytes(Application.ExecutablePath);
                 var flag = BitConverter.ToInt16(selfStartupBinary, selfStartupBinary.Length - sizeof(Int16));

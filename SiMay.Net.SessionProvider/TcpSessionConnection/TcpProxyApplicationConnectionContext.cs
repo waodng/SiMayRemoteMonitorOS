@@ -26,6 +26,26 @@ namespace SiMay.Net.SessionProvider
         /// </summary>
         public long Id { get; private set; }
 
+        //private byte[] _decompressData;
+        ///// <summary>
+        ///// 完成缓冲区
+        ///// </summary>
+        //public override byte[] CompletedBuffer
+        //{
+        //    get
+        //    {
+        //        //缓存解压数据，防止重复调用造成性能低下
+        //        if (_decompressData.IsNull())
+        //        {
+        //            var waitDecompressData = ProxyProtocolConstructionHelper.TakeHeadAndMessage(CurrentSession.CompletedBuffer);
+        //            _decompressData = GZipHelper.Decompress(waitDecompressData);
+        //        }
+        //        return _decompressData;
+        //    }
+
+        //    set => _decompressData = value;
+        //}
+
         /// <summary>
         /// 缓冲区
         /// </summary>

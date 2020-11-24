@@ -3,6 +3,7 @@ using SiMay.Basic;
 using SiMay.Core;
 using SiMay.Net.SessionProvider;
 using SiMay.Net.SessionProvider.Providers;
+using SiMay.Platform.Windows.Helper;
 using SiMay.RemoteService.Loader;
 using SiMay.Sockets.Tcp;
 using System;
@@ -90,6 +91,8 @@ namespace SiMay.Service.Core
                 AppConfiguration.GetApplicationConfiguration<AppConfiguration>().GroupName = StartParameter.GroupName;
 
             AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter = StartParameter;
+
+            SystemMessageNotify.InitializeNotifyIcon();
         }
 
         private void ConnectToServer()

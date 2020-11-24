@@ -164,6 +164,7 @@ namespace SiMay.Net.SessionProvider.Providers
             else if (type == ConnectionWorkType.ApplicationConnection)
             {
                 var sessionContext = session.AppTokens[SysContanct.INDEX_WORKER].ConvertTo<TcpServiceSessionContext>();
+                sessionContext.OnProcess();
                 this.Notification(sessionContext, TcpSessionNotify.OnDataReceived);
             }
         }
