@@ -314,15 +314,15 @@ namespace SiMay.RemoteMonitor.Application
             base.WndProc(ref m);
         }
 
-        private void OnServcieInitEventHandler(RemoteScreenAdapterHandler adapterHandler, Size desktopSize, Size dpiSize, int currentMonitorIndex, MonitorItem[] monitorItems)
+        private void OnServcieInitEventHandler(RemoteScreenAdapterHandler adapterHandler, Size desktopSize, float dpiX,float dpiY, int currentMonitorIndex, MonitorItem[] monitorItems)
         {
             if (!_videoFrameGraphics.IsNull())
                 _videoFrameGraphics.Dispose();
 
             this._currenMonitorIndex = currentMonitorIndex;
             this._monitorItems = monitorItems;
-            this._srcImageWidth = Convert.ToInt32(desktopSize.Width / Scaling(dpiSize.Width));
-            this._srcImageHeight = Convert.ToInt32(desktopSize.Height / Scaling(dpiSize.Height));
+            this._srcImageWidth = Convert.ToInt32(desktopSize.Width / dpiX);
+            this._srcImageHeight = Convert.ToInt32(desktopSize.Height / dpiY);
 
             _currentFrame = new Bitmap(this._srcImageWidth, this._srcImageHeight);
             _currentFrameGraphics = Graphics.FromImage(_currentFrame);
@@ -333,20 +333,6 @@ namespace SiMay.RemoteMonitor.Application
             g.Dispose();
             this.StartGetScreen();
         }
-
-        private double Scaling(int DpiIndex)
-        {
-            switch (DpiIndex)
-            {
-                case 96: return 1;
-                case 120: return 1.25;
-                case 144: return 1.5;
-                case 168: return 1.75;
-                case 192: return 2;
-            }
-            return 1;
-        }
-
         private void OnScreenFragmentEventHandler(RemoteScreenAdapterHandler adapterHandler, Fragment[] fragments, ScreenReceivedKind type)
         {
             switch (type)

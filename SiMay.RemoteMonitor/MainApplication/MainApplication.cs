@@ -26,6 +26,21 @@ namespace SiMay.RemoteMonitor.MainApplication
     {
         public MainApplication()
         {
+            //注册应用
+            this._appMainAdapterHandler.ApplicationTypes
+                .ApplicationRegister<AudioApplication>()
+                .ApplicationRegister<FileApplication>()
+                .ApplicationRegister<RegEditorApplication>()
+                .ApplicationRegister<ScreenApplication>()
+                .ApplicationRegister<ShellApplication>()
+                .ApplicationRegister<StartupApplication>()
+                .ApplicationRegister<SystemApplication>()
+                .ApplicationRegister<TcpConnectionApplication>()
+                .ApplicationRegister<VideoApplication>()
+                .ApplicationRegister<RemoteUpdateApplication>();
+
+            var config = File.Exists(SysConstantsExtend.ConfigPath) ? JsonConvert.DeserializeObject<SystemAppConfig>(File.ReadAllText(SysConstantsExtend.ConfigPath)) : new SystemAppConfig();
+            AppConfiguration.SetOption(config);
 
             InitializeComponent();
         }
@@ -46,22 +61,6 @@ namespace SiMay.RemoteMonitor.MainApplication
         private MainApplicationAdapterHandler _appMainAdapterHandler = new MainApplicationAdapterHandler(new SystemAppConfig());
         private void MainApplication_Load(object sender, EventArgs e)
         {
-            //注册应用
-            this._appMainAdapterHandler.ApplicationTypes
-                .ApplicationRegister<AudioApplication>()
-                .ApplicationRegister<FileApplication>()
-                .ApplicationRegister<RegEditorApplication>()
-                .ApplicationRegister<ScreenApplication>()
-                .ApplicationRegister<ShellApplication>()
-                .ApplicationRegister<StartupApplication>()
-                .ApplicationRegister<SystemApplication>()
-                .ApplicationRegister<TcpConnectionApplication>()
-                .ApplicationRegister<VideoApplication>()
-                .ApplicationRegister<RemoteUpdateApplication>();
-
-            var config = File.Exists(SysConstantsExtend.ConfigPath) ? JsonConvert.DeserializeObject<SystemAppConfig>(File.ReadAllText(SysConstantsExtend.ConfigPath)) : new SystemAppConfig();
-            AppConfiguration.SetOption(config);
-
             this.ViewOnAdaptiveHandler();
             this.OnLoadConfiguration();
             this.RegisterMessageHandler();

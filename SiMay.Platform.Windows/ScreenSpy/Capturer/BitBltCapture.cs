@@ -20,6 +20,11 @@ namespace SiMay.Platform.Windows
                         );
         [DllImport("User32.dll")]
         private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+        const int HORZRES = 8;
+        const int VERTRES = 10;
+        const int LOGPIXELSX = 88;
+        const int LOGPIXELSY = 90;
         const int DESKTOPVERTRES = 117;
         const int DESKTOPHORZRES = 118;
 
@@ -67,6 +72,7 @@ namespace SiMay.Platform.Windows
         private Size _imageSize = Size.Empty;
         private int _selectedScreen = Screen.AllScreens.ToList().IndexOf(Screen.PrimaryScreen);
         private Graphics Graphic { get; set; }
+
         private Size DesktopSize
         {
             get

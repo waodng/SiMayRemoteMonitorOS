@@ -60,20 +60,20 @@ namespace SiMay.RemoteService.Loader
         {
             var clientConfig = new TcpSocketSaeaClientConfiguration();
             _socketSaeaClientAgent = TcpSocketsFactory.CreateClientAgent(TcpSocketSaeaSessionType.Packet, clientConfig,
-                (Sockets.Delegate.NotifyEventHandler<TcpSessionNotify, TcpSocketSaeaSession>)((notity, session) =>
+                (notity, session) =>
             {
                 switch (notity)
                 {
                     case TcpSessionNotify.OnConnected:
                         _trunkTcpSession = session;
-                        SendActiveFlag();
+                        //SendActiveFlag();
                         break;
                     case TcpSessionNotify.OnSend:
                         break;
                     case TcpSessionNotify.OnDataReceiveing:
                         break;
                     case TcpSessionNotify.OnDataReceived:
-                        _handlerBinder.CallFunctionPacketHandler((TcpSocketSaeaSession)session, (TrunkMessageHead)session.CompletedBuffer.GetMessageHead<TrunkMessageHead>(), (object)this);
+                        _handlerBinder.CallFunctionPacketHandler(session, session.CompletedBuffer.GetMessageHead<TrunkMessageHead>(), this);
                         break;
                     case TcpSessionNotify.OnClosed:
                         _trunkTcpSession = null;
@@ -83,7 +83,7 @@ namespace SiMay.RemoteService.Loader
                     default:
                         break;
                 }
-            }));
+            });
         }
 
         private void SessionCloseHandler()
@@ -143,14 +143,14 @@ namespace SiMay.RemoteService.Loader
             Send(data);
             _isRun = false;
         }
-        private void SendActiveFlag()
-        {
-            var data = MessageHelper.CopyMessageHeadTo(TrunkMessageHead.S_Active, new ActivePack()
-            {
-                SessionId = _sessionId
-            });
-            Send(data);
-        }
+        //private void SendActiveFlag()
+        //{
+        //    var data = MessageHelper.CopyMessageHeadTo(TrunkMessageHead.S_Active, new ActivePack()
+        //    {
+        //        SessionId = _sessionId
+        //    });
+        //    Send(data);
+        //}
 
         private void Send(byte[] data)
         {

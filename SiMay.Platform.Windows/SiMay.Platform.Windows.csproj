@@ -55,6 +55,7 @@
     <Compile Include="Helper\PlatformHelper.cs" />
     <Compile Include="Helper\RegistryKeyHelper.cs" />
     <Compile Include="Helper\RegValueHelper.cs" />
+    <Compile Include="Helper\ScreenDpiHelper.cs" />
     <Compile Include="Helper\ServiceInstallerHelper.cs" />
     <Compile Include="Helper\SystemMessageNotifyHelper.cs" />
     <Compile Include="Helper\SystemSessionHelper.cs" />

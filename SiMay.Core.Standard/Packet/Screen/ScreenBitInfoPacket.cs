@@ -8,9 +8,9 @@ namespace SiMay.Core
 {
     public class ScreenInitBitPacket : EntitySerializerBase
     {
-        public int DpiX { get; set; }
+        public float DpiX { get; set; }
 
-        public int DpiY { get; set; }
+        public float DpiY { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
 
