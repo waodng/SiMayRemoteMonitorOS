@@ -248,6 +248,12 @@ namespace SiMay.Service.Core
         }
         private void CloseHandler(SessionProviderContext session, TcpSessionNotify notify)
         {
+            if (session.IsNull())
+            {
+                internalReconnect();
+                return;
+            }
+
             if (_currentSessionStatus == STATE_DISCONNECT && session.AppTokens.IsNull())
             {
                 //服务主连接断开或未连接
@@ -269,7 +275,19 @@ namespace SiMay.Service.Core
                 //清除主连接会话信息
                 this.SetSession(null);
                 Interlocked.Exchange(ref _currentSessionStatus, STATE_DISCONNECT);
+                internalReconnect();
+            }
+            else if (workType == SessionKind.APP_SERVICE_SESSION)
+            {
+                var appService = ((ApplicationRemoteService)session.AppTokens[1]);
+                if (appService.WhetherClosed)
+                    return;
+                appService.WhetherClosed = true;
+                appService.SessionClosed();
+            }
 
+            void internalReconnect()
+            {
                 var timer = new System.Timers.Timer();
                 timer.Interval = 5000;
                 timer.Elapsed += (s, e) =>
@@ -281,14 +299,6 @@ namespace SiMay.Service.Core
                     timer.Dispose();
                 };
                 timer.Start();
-            }
-            else if (workType == SessionKind.APP_SERVICE_SESSION)
-            {
-                var appService = ((ApplicationRemoteService)session.AppTokens[1]);
-                if (appService.WhetherClosed)
-                    return;
-                appService.WhetherClosed = true;
-                appService.SessionClosed();
             }
         }
 

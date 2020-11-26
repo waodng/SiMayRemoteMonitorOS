@@ -8,8 +8,19 @@ namespace SiMay.RemoteService.Loader
 {
     public class ServiceOptions : EntitySerializerBase
     {
+        /// <summary>
+        /// 被控端唯一Id
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// 服务器主机
+        /// </summary>
         public string Host { get; set; }
+
+        /// <summary>
+        /// 服务器端口
+        /// </summary>
         public int Port { get; set; }
 
         /// <summary>

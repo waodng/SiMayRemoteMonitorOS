@@ -13,4 +13,12 @@ namespace SiMay.RemoteMonitor.Attributes
     {
 
     }
+
+    /// <summary>
+    /// 菜单
+    /// </summary>
+    public class UnconventionalApplicationAttribute : Attribute
+    {
+
+    }
 }

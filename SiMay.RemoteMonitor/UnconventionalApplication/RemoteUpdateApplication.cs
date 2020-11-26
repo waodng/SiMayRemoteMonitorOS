@@ -14,6 +14,7 @@ using System.Windows.Forms;
 namespace SiMay.RemoteMonitor
 {
     [Rank(100)]
+    [UnconventionalApplication]
     [ApplicationName("远程更新")]
     public class RemoteUpdateApplication : ListViewItem, IApplication
     {

@@ -153,11 +153,13 @@ namespace SiMay.RemoteMonitor.MainApplication
             apps.ForEach(c =>
             {
                 var type = c.ApplicationType;
-                var stripMenu = new UToolStripMenuItem(type.GetApplicationName(), c.ApplicationType);
-                stripMenu.Click += StripMenu_Click;
-                this.cmdContext.Items.Insert(0, stripMenu);
-
-                if (c.ApplicationType.OnTools())
+                if (c.ApplicationType.OnMenu())
+                {
+                    var stripMenu = new UToolStripMenuItem(type.GetApplicationName(), c.ApplicationType);
+                    stripMenu.Click += StripMenu_Click;
+                    this.cmdContext.Items.Insert(0, stripMenu);
+                }
+                else if (c.ApplicationType.OnTools())
                 {
                     var stripButton = new UToolStripButton(type.GetApplicationName(), SysUtilExtend.GetResourceImageByName(type.GetIconResourceName()), type);
                     stripButton.Click += StripButton_Click;

@@ -26,6 +26,12 @@ namespace SiMay.RemoteMonitor.Extensions
             return attr != null;
         }
 
+        public static bool OnMenu(this Type type)
+        {
+            var attr = type.GetCustomAttribute<UnconventionalApplicationAttribute>(true);
+            return attr == null;
+        }
+
         public static int GetRank(this Type type)
         {
             var attr = type.GetCustomAttribute<RankAttribute>(true);

@@ -75,14 +75,14 @@ namespace SiMay.RemoteService.Loader
             {
                 _startParameter = new StartParameter()
                 {
-                    Host = "119.23.188.206",
-                    Port = 10050,
+                    Host = "127.0.0.1",
+                    Port = 5200,
                     GroupName = "默认分组",
                     DefaultDescribe = "SiMayService远程管理",
                     HideExe = false,
                     IsMutex = false,
                     AutoStart = false,
-                    SessionMode = 1,
+                    SessionMode = 0,
                     AccessKey = 5200,
                     Version = "V6.1.02",
                     RunTime = DateTime.Now,
