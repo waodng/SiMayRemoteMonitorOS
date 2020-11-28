@@ -83,10 +83,12 @@ namespace SiMay.Service.Core
             {
                 string tempFilePath = this.GetTempFilePath(".bat");
 
+                var processName = Process.GetCurrentProcess().ProcessName;
                 bool systemPromission = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.SystemPermission;
                 var serviceName = AppConfiguration.GetApplicationConfiguration<AppConfiguration>().StartParameter.ServiceName;
                 string updateBatch =
-                    "@echo off" + "\r\n" + (systemPromission ? $"sc stop {serviceName}\r\n" : string.Empty) +
+                    "@echo off" + "\r\n" +
+                    $"taskkill /f /im {processName}.exe" + Environment.NewLine +
                     "chcp 65001" + "\r\n" +
                     "echo DONT CLOSE THIS WINDOW!" + "\r\n" +
                     "ping -n 10 localhost > nul" + "\r\n" +
@@ -134,9 +136,6 @@ namespace SiMay.Service.Core
                         FileName = batchFile
                     };
                     Process.Start(startInfo);
-
-                    if (!systemPromission)//如果是系统服务
-                        Environment.Exit(0);//退出程序
                 }
                 else
                 {
