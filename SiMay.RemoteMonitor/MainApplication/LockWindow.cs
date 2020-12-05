@@ -22,7 +22,7 @@ namespace SiMay.RemoteMonitor.MainApplication
         bool _ifree = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            if (pwdTextBox.Text.Equals(AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().UnLockeCredential))
+            if (pwdTextBox.Text.Equals(AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().UnLockeCredential ?? ""))
             {
                 this._ifree = true;
                 AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().Haslock = false;
