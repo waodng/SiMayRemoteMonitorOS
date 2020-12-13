@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScreenSpy\DesktopCapture.cs" />
     <Compile Include="Entitys\RegValueData.cs" />
     <Compile Include="Enums\DifferStatus.cs" />
     <Compile Include="Extensions\RegistryKeyExtensions.cs" />
@@ -81,5 +82,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

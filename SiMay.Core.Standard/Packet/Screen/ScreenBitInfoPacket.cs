@@ -15,6 +15,7 @@ namespace SiMay.Core
         public int Width { get; set; }
 
         public int PrimaryScreenIndex { get; set; }
+
         public MonitorItem[] Monitors { get; set; }
     }
 

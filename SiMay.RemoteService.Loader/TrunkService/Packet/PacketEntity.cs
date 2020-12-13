@@ -18,6 +18,8 @@ namespace SiMay.RemoteService.Loader
 
     public class CreateUserProcessPack : EntitySerializerBase
     {
+        public string DesktopName { get; set; }
+
         public int SessionId { get; set; }
     }
 

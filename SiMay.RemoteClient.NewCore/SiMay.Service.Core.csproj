@@ -95,6 +95,9 @@
     <Reference Include="AForge.Video.DirectShow">
       <HintPath>..\AForge.dll\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
+    <Reference Include="FFmpeg.AutoGen, Version=4.0.0.2, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
+      <HintPath>..\packages\FFmpeg.AutoGen.4.0.0.2\lib\net45\FFmpeg.AutoGen.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
@@ -124,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationService\FileTransportService.cs" />
+    <Compile Include="ApplicationService\RemoteDesktopService.cs" />
     <Compile Include="Attribute\ServiceName.cs" />
     <Compile Include="ApplicationService\RegistryEditorService.cs" />
     <Compile Include="ApplicationService\Registry\RegistryEditor.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="Base\MainApplicationServiceBase.cs" />
     <Compile Include="Base\RemoteSimpleServiceBase.cs" />
     <Compile Include="Custom\EventList.cs" />
+    <Compile Include="GlobalMessageBus.cs" />
     <Compile Include="Helper\ImageExtensionHelper.cs" />
     <Compile Include="Helper\ServiceInstallerHelper.cs" />
     <Compile Include="Helper\SimpleServiceHelper.cs" />
@@ -148,7 +153,7 @@
     <Compile Include="ApplicationService\FileService.cs" />
     <Compile Include="Helper\AppDownloaderHelper.cs" />
     <Compile Include="Base\ApplicationProtocolService.cs" />
-    <Compile Include="Base\ApplicationRemoteService.cs" />
+    <Compile Include="Base\ApplicationRemoteServiceBase.cs" />
     <Compile Include="Base\ApplicationServiceBase.cs" />
     <Compile Include="ApplicationService\ScreenService.cs" />
     <Compile Include="Helper\GetSystemInforHelper.cs" />
@@ -160,6 +165,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interface\IApplicationService.cs" />
     <Compile Include="Helper\AppConfigRegValueHelper.cs" />
+    <Compile Include="SimpleService\ActivateRemoteServiceSimpleService.cs" />
     <Compile Include="SimpleService\ConfiguartionSimpleService.cs" />
     <Compile Include="SimpleService\DesktopViewSimpleService.cs" />
     <Compile Include="SimpleService\ExecuteFileUpdateSimpleService.cs" />
@@ -168,6 +174,7 @@
     <Compile Include="SimpleService\WebSimpleService.cs" />
     <Compile Include="SimpleService\WsStatusSimpleService.cs" />
     <Compile Include="SysUtil.cs" />
+    <Compile Include="VideoEncoder\ErrorCodeHelper.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

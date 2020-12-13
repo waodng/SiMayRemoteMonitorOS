@@ -121,11 +121,12 @@ namespace SiMay.RemoteService.Loader
             return sessionItems.Sessions;
         }
 
-        public void CreateProcessAsUser(int sessionId)
+        public void CreateProcessAsUser(int sessionId,string desktopName)
         {
             var data = MessageHelper.CopyMessageHeadTo(TrunkMessageHead.S_CreateUserProcess,
                 new CreateUserProcessPack()
                 {
+                    DesktopName = desktopName,
                     SessionId = sessionId
                 });
             Send(data);

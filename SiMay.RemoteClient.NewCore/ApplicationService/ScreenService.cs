@@ -15,8 +15,8 @@ using System.Runtime.InteropServices;
 namespace SiMay.Service.Core
 {
     [ServiceName("远程桌面")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_DESKTOP)]
-    public class ScreenService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_SCREEN)]
+    public class ScreenService : ApplicationRemoteServiceBase
     {
         private int _bscanmode = 1; //0差异 1逐行
         private bool _cleanWallPaper = false;

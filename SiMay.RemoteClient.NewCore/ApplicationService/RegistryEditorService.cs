@@ -10,8 +10,8 @@ using System.Text;
 namespace SiMay.Service.Core
 {
     [ServiceName("远程注册表")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_REGEDIT)]
-    public class RegistryEditorService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_REGEDIT)]
+    public class RegistryEditorService : ApplicationRemoteServiceBase
     {
         public override void SessionInited(SessionProviderContext session)
         {

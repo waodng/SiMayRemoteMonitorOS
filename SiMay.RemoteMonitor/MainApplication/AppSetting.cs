@@ -56,15 +56,15 @@ namespace SiMay.RemoteMonitor.MainApplication
                 var type = c.ApplicationType;
                 funComboBox.Items.Add(new KeyValueItem()
                 {
-                    Key = type.GetApplicationName(),
+                    Key = Extensions.TypeExtension.GetApplicationName(type),
                     Value = c.ApplicationName
                 });
                 if (c.ApplicationName == AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DbClickViewExc)
-                    funComboBox.Text = type.GetApplicationName();
+                    funComboBox.Text = Extensions.TypeExtension.GetApplicationName(type);
             });
 
             if (funComboBox.SelectedIndex == -1)
-                funComboBox.Text = SysUtil.ApplicationTypes.First().ApplicationType.GetApplicationName();
+                funComboBox.Text = Extensions.TypeExtension.GetApplicationName(SysUtil.ApplicationTypes.First().ApplicationType);
 
             ip.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().IPAddress;
             conPwd.Text = AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().ValidatePassWord;

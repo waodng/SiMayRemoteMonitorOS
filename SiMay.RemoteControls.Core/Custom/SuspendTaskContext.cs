@@ -80,11 +80,10 @@ namespace SiMay.RemoteControls.Core
                     return;
                 }
                 var appName = ApplicationAdapterHandler.App.GetType().Name;
-                syncContext.Session.SendTo(MessageHead.S_MAIN_ACTIVATE_APPLICATION_SERVICE,
-                    new ActivateServicePack()
-                    {
-                        CommandText = $"{appName}.{ApplicationAdapterHandler.GetApplicationKey()}"
-                    });
+                SimpleApplicationHelper
+                    .SimpleApplicationCollection
+                    .GetSimpleApplication<ActivateRemoteServiceSimpleApplication>()
+                    .RemoteActivateService(syncContext.Session, $"{appName}.{ApplicationAdapterHandler.GetApplicationName()}", ApplicationAdapterHandler.StartParamenter);
             }
         }
 

@@ -5,8 +5,8 @@ using SiMay.Net.SessionProvider;
 namespace SiMay.Service.Core
 {
     [ServiceName("键盘输入记录")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_KEYBOARD)]
-    public class KeyboardService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_KEYBOARD)]
+    public class KeyboardService : ApplicationRemoteServiceBase
     {
         private Keyboard _keyboard;
         public override void SessionInited(SessionProviderContext session)

@@ -18,7 +18,7 @@ namespace SiMay.Service.Core
             RemoteServiceTypes = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .Where(type => typeof(ApplicationRemoteService).IsAssignableFrom(type) && type.IsSubclassOf(typeof(ApplicationRemoteService)) && type.IsClass)
+                .Where(type => typeof(ApplicationRemoteServiceBase).IsAssignableFrom(type) && type.IsSubclassOf(typeof(ApplicationRemoteServiceBase)) && type.IsClass)
                 .Select(type => new ServiceTypeItem()
                 {
                     RemoteServiceKey = type.GetApplicationKey() ?? throw new Exception(type.Name + ":the serviceKey cannot be empty!"),

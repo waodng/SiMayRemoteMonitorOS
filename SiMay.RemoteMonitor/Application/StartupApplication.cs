@@ -33,11 +33,6 @@ namespace SiMay.RemoteMonitor.Application
             this.Show();
         }
 
-        public void SetParameter(object arg)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SessionClose(ApplicationBaseAdapterHandler handler)
         {
             this.Text = _title + " [" + this.StartupAdapterHandler.State.ToString() + "]";

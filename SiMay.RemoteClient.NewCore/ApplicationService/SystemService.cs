@@ -14,14 +14,15 @@ using static SiMay.Platform.Windows.CommonWin32Api;
 namespace SiMay.Service.Core
 {
     [ServiceName("系统管理")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_SYSMANAGER)]
-    public class SystemService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_SYSMANAGER)]
+    public class SystemService : ApplicationRemoteServiceBase
     {
-        private ComputerInfo _memoryInfo = new ComputerInfo();
-        private PerformanceCounter _cpuInfo = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+        private ComputerInfo _memoryInfo = default;
+        private PerformanceCounter _cpuInfo = default;
         public override void SessionInited(SessionProviderContext session)
         {
-
+            _memoryInfo = new ComputerInfo();
+            _cpuInfo = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
 
         public override void SessionClosed()
@@ -88,8 +89,8 @@ namespace SiMay.Service.Core
         [PacketHandler(MessageHead.S_SYSTEM_CREATE_USER_PROCESS)]
         public void CreateProcessAsUser(SessionProviderContext session)
         {
-            var sessionId = session.GetMessageEntity<CreateProcessAsUserPack>().SessionId;
-            UserTrunkContext.UserTrunkContextInstance?.CreateProcessAsUser(sessionId);
+            var request = session.GetMessageEntity<CreateProcessAsUserPack>();
+            UserTrunkContext.UserTrunkContextInstance?.CreateProcessAsUser(request.SessionId, request.DesktopName);
         }
 
         [PacketHandler(MessageHead.S_SYSTEM_GET_PROCESS_LIST)]

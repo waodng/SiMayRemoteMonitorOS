@@ -10,7 +10,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_STARTUP)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_STARTUP)]
     public class StartupAdapterHandler : ApplicationBaseAdapterHandler
     {
         public readonly IReadOnlyList<GroupItem> StartupGroupItems;

@@ -14,8 +14,8 @@ using static SiMay.Platform.Windows.CommonWin32Api;
 namespace SiMay.Service.Core
 {
     [ServiceName("文件管理")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_FILE)]
-    public class FileService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_FILE)]
+    public class FileService : ApplicationRemoteServiceBase
     {
         private const int FILE_BUFFER_SIZE = 1024 * 512;
 

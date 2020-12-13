@@ -10,9 +10,9 @@ namespace SiMay.RemoteControls.Core
 {
     public static class AppTypeExtension
     {
-        public static PropertyInfo GetApplicationAdapterPropertyByKey(this IApplication application, string appKey)
+        public static PropertyInfo GetApplicationAdapterPropertyByName(this IApplication application, string appKey)
         {
-            return GetApplicationAdapterPropertyByKey(application.GetType(), appKey);
+            return GetApplicationAdapterPropertyByName(application.GetType(), appKey);
         }
 
         public static PropertyInfo[] GetApplicationAdapterProperty(this IApplication application)
@@ -26,9 +26,9 @@ namespace SiMay.RemoteControls.Core
         /// <param name="type"></param>
         /// <param name="appKey"></param>
         /// <returns></returns>
-        public static PropertyInfo GetApplicationAdapterPropertyByKey(this Type type, string appKey)
+        public static PropertyInfo GetApplicationAdapterPropertyByName(this Type type, string appKey)
         {
-            return GetApplicationAdapterProperty(type).FristOrDefault(c => c.PropertyType.GetApplicationKey().Equals(appKey, StringComparison.OrdinalIgnoreCase));
+            return GetApplicationAdapterProperty(type).FristOrDefault(c => c.PropertyType.GetApplicationName().Equals(appKey, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SiMay.RemoteControls.Core
         public static string[] GetActivateApplicationKey(this Type type)
         {
             var applicationName = type.Name;
-            return type.GetApplicationAdapterProperty().Select(c => $"{applicationName}.{c.PropertyType.GetApplicationKey() }").ToArray();
+            return type.GetApplicationAdapterProperty().Select(c => $"{applicationName}.{c.PropertyType.GetApplicationName() }").ToArray();
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace SiMay.RemoteControls.Core
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>
-        public static string GetApplicationKey(this ApplicationBaseAdapterHandler adapter)
+        public static string GetApplicationName(this ApplicationBaseAdapterHandler adapter)
         {
-            return GetApplicationKey(adapter.GetType());
+            return GetApplicationName(adapter.GetType());
         }
 
         /// <summary>
@@ -76,10 +76,10 @@ namespace SiMay.RemoteControls.Core
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string GetApplicationKey(this Type type)
+        public static string GetApplicationName(this Type type)
         {
-            var attr = type.GetCustomAttribute<SiMay.Core.ApplicationKeyAttribute>(true);
-            return attr.Key;
+            var attr = type.GetCustomAttribute<SiMay.Core.ApplicationNameAttribute>(true);
+            return attr.Name;
         }
     }
 }

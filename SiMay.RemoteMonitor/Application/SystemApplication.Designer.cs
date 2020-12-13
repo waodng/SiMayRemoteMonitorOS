@@ -36,9 +36,21 @@ namespace SiMay.RemoteMonitor.Application
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.processListView = new SiMay.RemoteMonitor.UserControls.UListView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.desktopNameCombox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.sessionsListView = new SiMay.RemoteMonitor.UserControls.UListView();
+            this.userName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.sessionId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.state = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.windowsStationName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.userProcessCreated = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.systemInfoList = new SiMay.RemoteMonitor.UserControls.UListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关闭窗口ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,16 +68,6 @@ namespace SiMay.RemoteMonitor.Application
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.moryUse = new System.Windows.Forms.ToolStripStatusLabel();
             this.refreshTimer = new System.Windows.Forms.Timer(this.components);
-            this.processListView = new SiMay.RemoteMonitor.UserControls.UListView();
-            this.sessionsListView = new SiMay.RemoteMonitor.UserControls.UListView();
-            this.userName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.sessionId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.state = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.windowsStationName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.userProcessCreated = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.systemInfoList = new SiMay.RemoteMonitor.UserControls.UListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -83,7 +85,7 @@ namespace SiMay.RemoteMonitor.Application
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(9, 36);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(821, 538);
@@ -97,9 +99,9 @@ namespace SiMay.RemoteMonitor.Application
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.processListView);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage1.Size = new System.Drawing.Size(813, 509);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "进程管理";
@@ -108,7 +110,7 @@ namespace SiMay.RemoteMonitor.Application
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.Location = new System.Drawing.Point(425, 462);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(117, 30);
             this.button4.TabIndex = 14;
@@ -120,7 +122,7 @@ namespace SiMay.RemoteMonitor.Application
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.Location = new System.Drawing.Point(551, 462);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(117, 30);
             this.button3.TabIndex = 13;
@@ -132,7 +134,7 @@ namespace SiMay.RemoteMonitor.Application
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(676, 462);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(117, 30);
             this.button2.TabIndex = 12;
@@ -140,24 +142,68 @@ namespace SiMay.RemoteMonitor.Application
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // processListView
+            // 
+            this.processListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.processListView.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.processListView.CheckBoxes = true;
+            this.processListView.FullRowSelect = true;
+            this.processListView.HideSelection = false;
+            this.processListView.Location = new System.Drawing.Point(17, 18);
+            this.processListView.Margin = new System.Windows.Forms.Padding(4);
+            this.processListView.Name = "processListView";
+            this.processListView.ProgressColumnIndex = -1;
+            this.processListView.Size = new System.Drawing.Size(775, 438);
+            this.processListView.TabIndex = 11;
+            this.processListView.UseCompatibleStateImageBehavior = false;
+            this.processListView.UseWindowsThemStyle = true;
+            this.processListView.View = System.Windows.Forms.View.Details;
+            // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label1);
+            this.tabPage3.Controls.Add(this.desktopNameCombox);
             this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Controls.Add(this.sessionsListView);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage3.Size = new System.Drawing.Size(813, 509);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "会话管理";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(15, 469);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(127, 15);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Window Station:";
+            // 
+            // desktopNameCombox
+            // 
+            this.desktopNameCombox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.desktopNameCombox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.desktopNameCombox.FormattingEnabled = true;
+            this.desktopNameCombox.Items.AddRange(new object[] {
+            "winlogon",
+            "default",
+            "ScreenSaver"});
+            this.desktopNameCombox.Location = new System.Drawing.Point(148, 466);
+            this.desktopNameCombox.Name = "desktopNameCombox";
+            this.desktopNameCombox.Size = new System.Drawing.Size(179, 23);
+            this.desktopNameCombox.TabIndex = 14;
+            // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(676, 461);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 30);
             this.button1.TabIndex = 13;
@@ -165,17 +211,99 @@ namespace SiMay.RemoteMonitor.Application
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // sessionsListView
+            // 
+            this.sessionsListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sessionsListView.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.sessionsListView.CheckBoxes = true;
+            this.sessionsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.userName,
+            this.sessionId,
+            this.state,
+            this.windowsStationName,
+            this.userProcessCreated});
+            this.sessionsListView.FullRowSelect = true;
+            this.sessionsListView.HideSelection = false;
+            this.sessionsListView.Location = new System.Drawing.Point(17, 18);
+            this.sessionsListView.Margin = new System.Windows.Forms.Padding(4);
+            this.sessionsListView.Name = "sessionsListView";
+            this.sessionsListView.ProgressColumnIndex = -1;
+            this.sessionsListView.Size = new System.Drawing.Size(775, 435);
+            this.sessionsListView.TabIndex = 12;
+            this.sessionsListView.UseCompatibleStateImageBehavior = false;
+            this.sessionsListView.UseWindowsThemStyle = true;
+            this.sessionsListView.View = System.Windows.Forms.View.Details;
+            // 
+            // userName
+            // 
+            this.userName.Text = "用户名";
+            this.userName.Width = 100;
+            // 
+            // sessionId
+            // 
+            this.sessionId.Text = "会话标识";
+            this.sessionId.Width = 100;
+            // 
+            // state
+            // 
+            this.state.Text = "会话状态";
+            this.state.Width = 100;
+            // 
+            // windowsStationName
+            // 
+            this.windowsStationName.Text = "窗口站";
+            this.windowsStationName.Width = 100;
+            // 
+            // userProcessCreated
+            // 
+            this.userProcessCreated.Text = "被控用户进程";
+            this.userProcessCreated.Width = 100;
+            // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.tabPage2.Controls.Add(this.systemInfoList);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage2.Size = new System.Drawing.Size(813, 509);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "系统信息";
+            // 
+            // systemInfoList
+            // 
+            this.systemInfoList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.systemInfoList.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.systemInfoList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.systemInfoList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.systemInfoList.FullRowSelect = true;
+            this.systemInfoList.HideSelection = false;
+            this.systemInfoList.Location = new System.Drawing.Point(8, 8);
+            this.systemInfoList.Margin = new System.Windows.Forms.Padding(4);
+            this.systemInfoList.Name = "systemInfoList";
+            this.systemInfoList.ProgressColumnIndex = -1;
+            this.systemInfoList.Size = new System.Drawing.Size(795, 494);
+            this.systemInfoList.TabIndex = 12;
+            this.systemInfoList.UseCompatibleStateImageBehavior = false;
+            this.systemInfoList.UseWindowsThemStyle = true;
+            this.systemInfoList.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "信息项";
+            this.columnHeader1.Width = 150;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "值";
+            this.columnHeader2.Width = 300;
             // 
             // menuStrip1
             // 
@@ -185,7 +313,7 @@ namespace SiMay.RemoteMonitor.Application
             this.刷新信息ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1049, 38);
+            this.menuStrip1.Size = new System.Drawing.Size(839, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -194,7 +322,7 @@ namespace SiMay.RemoteMonitor.Application
             this.文件ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.关闭窗口ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(53, 34);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 关闭窗口ToolStripMenuItem
@@ -210,7 +338,7 @@ namespace SiMay.RemoteMonitor.Application
             this.立即刷新ToolStripMenuItem,
             this.更新速度ToolStripMenuItem});
             this.刷新信息ToolStripMenuItem.Name = "刷新信息ToolStripMenuItem";
-            this.刷新信息ToolStripMenuItem.Size = new System.Drawing.Size(53, 34);
+            this.刷新信息ToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
             this.刷新信息ToolStripMenuItem.Text = "选项";
             // 
             // 立即刷新ToolStripMenuItem
@@ -315,104 +443,6 @@ namespace SiMay.RemoteMonitor.Application
             this.refreshTimer.Interval = 1500;
             this.refreshTimer.Tick += new System.EventHandler(this.RefreshTimer_Tick);
             // 
-            // processList
-            // 
-            this.processListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.processListView.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.processListView.CheckBoxes = true;
-            this.processListView.FullRowSelect = true;
-            this.processListView.HideSelection = false;
-            this.processListView.Location = new System.Drawing.Point(17, 18);
-            this.processListView.Margin = new System.Windows.Forms.Padding(4);
-            this.processListView.Name = "processList";
-            this.processListView.Size = new System.Drawing.Size(775, 438);
-            this.processListView.TabIndex = 11;
-            this.processListView.UseCompatibleStateImageBehavior = false;
-            this.processListView.UseWindowsThemStyle = true;
-            this.processListView.View = System.Windows.Forms.View.Details;
-            // 
-            // sessionsListView
-            // 
-            this.sessionsListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sessionsListView.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.sessionsListView.CheckBoxes = true;
-            this.sessionsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.userName,
-            this.sessionId,
-            this.state,
-            this.windowsStationName,
-            this.userProcessCreated});
-            this.sessionsListView.FullRowSelect = true;
-            this.sessionsListView.HideSelection = false;
-            this.sessionsListView.Location = new System.Drawing.Point(17, 18);
-            this.sessionsListView.Margin = new System.Windows.Forms.Padding(4);
-            this.sessionsListView.Name = "sessionsListView";
-            this.sessionsListView.Size = new System.Drawing.Size(775, 435);
-            this.sessionsListView.TabIndex = 12;
-            this.sessionsListView.UseCompatibleStateImageBehavior = false;
-            this.sessionsListView.UseWindowsThemStyle = true;
-            this.sessionsListView.View = System.Windows.Forms.View.Details;
-            // 
-            // userName
-            // 
-            this.userName.Text = "用户名";
-            this.userName.Width = 100;
-            // 
-            // sessionId
-            // 
-            this.sessionId.Text = "会话标识";
-            this.sessionId.Width = 100;
-            // 
-            // state
-            // 
-            this.state.Text = "会话状态";
-            this.state.Width = 100;
-            // 
-            // windowsStationName
-            // 
-            this.windowsStationName.Text = "窗口站";
-            this.windowsStationName.Width = 100;
-            // 
-            // userProcessCreated
-            // 
-            this.userProcessCreated.Text = "被控用户进程";
-            this.userProcessCreated.Width = 100;
-            // 
-            // systemInfoList
-            // 
-            this.systemInfoList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.systemInfoList.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.systemInfoList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.systemInfoList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.systemInfoList.FullRowSelect = true;
-            this.systemInfoList.HideSelection = false;
-            this.systemInfoList.Location = new System.Drawing.Point(8, 8);
-            this.systemInfoList.Margin = new System.Windows.Forms.Padding(4);
-            this.systemInfoList.Name = "systemInfoList";
-            this.systemInfoList.Size = new System.Drawing.Size(795, 494);
-            this.systemInfoList.TabIndex = 12;
-            this.systemInfoList.UseCompatibleStateImageBehavior = false;
-            this.systemInfoList.UseWindowsThemStyle = true;
-            this.systemInfoList.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "信息项";
-            this.columnHeader1.Width = 150;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "值";
-            this.columnHeader2.Width = 300;
-            // 
             // SystemApplication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -422,7 +452,7 @@ namespace SiMay.RemoteMonitor.Application
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SystemApplication";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SystemManager";
@@ -431,6 +461,7 @@ namespace SiMay.RemoteMonitor.Application
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -478,5 +509,7 @@ namespace SiMay.RemoteMonitor.Application
         private System.Windows.Forms.ColumnHeader windowsStationName;
         private System.Windows.Forms.ColumnHeader userProcessCreated;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox desktopNameCombox;
     }
 }

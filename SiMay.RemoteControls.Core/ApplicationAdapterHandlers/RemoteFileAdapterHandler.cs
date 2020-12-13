@@ -13,7 +13,7 @@ using SiMay.Serialize.Standard;
 
 namespace SiMay.RemoteControls.Core
 {
-    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_FILE)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_FILE)]
     public class RemoteFileAdapterHandler : ApplicationBaseAdapterHandler
     {
         /// <summary>

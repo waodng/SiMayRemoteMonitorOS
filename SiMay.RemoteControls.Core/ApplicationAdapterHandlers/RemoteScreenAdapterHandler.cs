@@ -16,7 +16,7 @@ using System.Drawing;
 
 namespace SiMay.RemoteControls.Core
 {
-    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_DESKTOP)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_SCREEN)]
     public class RemoteScreenAdapterHandler : ApplicationBaseAdapterHandler
     {
 

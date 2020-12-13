@@ -11,8 +11,8 @@ namespace SiMay.Service.Core
     {
         public static string GetApplicationKey(this Type type)
         {
-            var attr = type.GetCustomAttribute<ApplicationKeyAttribute>(true);
-            return attr == null ? null : (attr as ApplicationKeyAttribute).Key;
+            var attr = type.GetCustomAttribute<ApplicationNameAttribute>(true);
+            return attr == null ? null : (attr as ApplicationNameAttribute).Name;
         }
     }
 }

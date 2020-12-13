@@ -16,12 +16,6 @@ namespace SiMay.RemoteControls.Core
         void Start();
 
         /// <summary>
-        /// 设置参数
-        /// </summary>
-        /// <param name="arg"></param>
-        void SetParameter(object arg);
-
-        /// <summary>
         /// 当会话断开时
         /// </summary>
         void SessionClose(ApplicationBaseAdapterHandler handler);

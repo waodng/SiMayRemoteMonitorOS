@@ -93,6 +93,7 @@ namespace SiMay.RemoteControls.Core
                 .SimpleApplicationRegister<MessageBoxSimpleApplication>()
                 .SimpleApplicationRegister<ShellSimpleApplication>()
                 .SimpleApplicationRegister<WebSimpleApplication>()
+                .SimpleApplicationRegister<ActivateRemoteServiceSimpleApplication>()
                 .SimpleApplicationRegister<WsStatusSimpleApplication>();
 
         }
@@ -317,7 +318,7 @@ namespace SiMay.RemoteControls.Core
         {
             lock (this)
             {
-                var activateResponse = session.GetMessageEntity<ActivateApplicationPack>();
+                var activateResponse = session.GetMessageEntity<ActivateResponsdApplicationPacket>();
                 string originName = activateResponse.OriginName;
                 string appKey = activateResponse.ApplicationKey;
                 string identifyId = activateResponse.IdentifyId;
@@ -340,7 +341,7 @@ namespace SiMay.RemoteControls.Core
                     else if (taskSchedule.Topic.Equals($"{identifyId},{applicationName}") && taskSchedule is ApplicationCreatingTimeOutSuspendTaskContext creatingTimeOutContext)
                     {
                         var application = creatingTimeOutContext.Application;
-                        var property = application.GetApplicationAdapterPropertyByKey(appKey);
+                        var property = application.GetApplicationAdapterPropertyByName(appKey);
                         if (property.IsNull())
                             throw new ArgumentNullException("adapter not found!");
 
@@ -348,6 +349,7 @@ namespace SiMay.RemoteControls.Core
                         adapter.App = application;
                         adapter.IdentifyId = identifyId;
                         adapter.OriginName = originName;
+                        adapter.StartParamenter = activateResponse.StartParameter;
                         adapter.SetSession(session);
                         //property.SetValue(application, adapter);
 
@@ -364,7 +366,7 @@ namespace SiMay.RemoteControls.Core
                     if (!context.IsNull())
                     {
                         //根据appKey查找该应用适配器
-                        var appAdapterProperty = context.ApplicationType.GetApplicationAdapterPropertyByKey(appKey);
+                        var appAdapterProperty = context.ApplicationType.GetApplicationAdapterPropertyByName(appKey);
 
                         if (appAdapterProperty.IsNull())
                             throw new ApplicationException("adapter not declaration!");
@@ -375,6 +377,7 @@ namespace SiMay.RemoteControls.Core
                         appHandlerBase.App = app;
                         appHandlerBase.IdentifyId = identifyId;
                         appHandlerBase.OriginName = originName;
+                        appHandlerBase.StartParamenter = activateResponse.StartParameter;
                         //appHandlerBase.ApplicationKey = context.Type.GetApplicationKey();
                         appHandlerBase.SetSession(session);
 
@@ -398,7 +401,7 @@ namespace SiMay.RemoteControls.Core
 
                     var handlerFieders = app
                         .GetApplicationAdapterProperty()
-                        .ToDictionary(key => key.PropertyType.GetApplicationKey(), val => val);
+                        .ToDictionary(key => key.PropertyType.GetApplicationName(), val => val);
 
                     if (handlerFieders.ContainsKey(appKey) && handlerFieders.TryGetValue(appKey, out var property))
                         property.SetValue(app, adapter);
@@ -536,7 +539,7 @@ namespace SiMay.RemoteControls.Core
                         //DisconnectTimePoint = DateTime.Now,
                         ApplicationAdapterHandler = adapterHandler,
                         SessionSyncContexts = SessionSyncContexts,
-                        Topic = $"{adapterHandler.IdentifyId},{appName}.{adapterHandler.GetApplicationKey()}"
+                        Topic = $"{adapterHandler.IdentifyId},{appName}.{adapterHandler.GetApplicationName()}"
                     });
                 }
                 else if (worktype == SessionKind.MAIN_SERVICE_SESSION)
@@ -569,8 +572,8 @@ namespace SiMay.RemoteControls.Core
         /// <param name="appKey"></param>
         public void RemoteActivateService(SessionSyncContext syncContext, string appKey)
         {
-            syncContext.Session.SendTo(MessageHead.S_MAIN_ACTIVATE_APPLICATION_SERVICE,
-                new ActivateServicePack()
+            syncContext.Session.SendTo(MessageHead.S_SIMPLE_ACTIVATE_REMOTE_SERVICE,
+                new ActivateRemoteServicePacket()
                 {
                     CommandText = appKey
                 });

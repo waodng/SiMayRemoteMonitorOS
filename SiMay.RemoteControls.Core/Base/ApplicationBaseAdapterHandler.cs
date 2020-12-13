@@ -51,6 +51,11 @@ namespace SiMay.RemoteControls.Core
         public string IdentifyId { get; set; }
 
         /// <summary>
+        /// 启动参数
+        /// </summary>
+        public string[] StartParamenter { get; set; }
+
+        /// <summary>
         /// 当前会话是否由用户关闭
         /// </summary>
         private bool _manualClose;

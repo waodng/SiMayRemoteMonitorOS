@@ -6,11 +6,17 @@ using System.Text;
 
 namespace SiMay.Core
 {
-    public class ActivateServicePack : EntitySerializerBase
+    public class ActivateRemoteServicePacket : EntitySerializerBase
     {
         public string CommandText { get; set; }
+
+        /// <summary>
+        /// 启动参数
+        /// </summary>
+        public string[] StartParameter { get; set; }
+
     }
-    public class ActivateApplicationPack : EntitySerializerBase
+    public class ActivateResponsdApplicationPacket : EntitySerializerBase
     {
 
         /// <summary>
@@ -32,5 +38,10 @@ namespace SiMay.Core
         /// 创建时命令
         /// </summary>
         public string ActivatedCommandText { get; set; }
+
+        /// <summary>
+        /// 启动参数
+        /// </summary>
+        public string[] StartParameter { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using SiMay.Platform.Windows;
 using SiMay.Sockets.Tcp;
 using SiMay.Sockets.Tcp.Session;
 using SiMay.Sockets.Tcp.TcpConfiguration;
+using SiMay.Sockets.UtilityHelper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace SiMay.RemoteService.Loader
 {
@@ -91,14 +93,15 @@ namespace SiMay.RemoteService.Loader
 
             // Obtain session ID for active session.
             uint dwSessionId = Kernel32.WTSGetActiveConsoleSessionId();
-
-            // Check for RDP session.  If active, use that session ID instead.
+            var desktopName = Win32Interop.GetCurrentDesktop();
             var rdpSessionID = Win32Interop.GetRDPSession();
             if (rdpSessionID > 0)
             {
+                if (dwSessionId != rdpSessionID)
+                    desktopName = "winlogon";
                 dwSessionId = rdpSessionID;
             }
-            this.CreateProcessAsUser(dwSessionId);
+            this.CreateProcessAsUser(dwSessionId, desktopName);
             ThreadHelper.CreateThread(() =>
             {
                 while (!_cancel)
@@ -133,7 +136,7 @@ namespace SiMay.RemoteService.Loader
                     if (process.Length <= 1)
                     {
                         var activeSessionId = Kernel32.WTSGetActiveConsoleSessionId();//获取活动会话
-                        var isOk = this.CreateProcessAsUser(activeSessionId);
+                        var isOk = this.CreateProcessAsUser(activeSessionId, Win32Interop.GetCurrentDesktop());
                     }
 
                     Thread.Sleep(1000);
@@ -142,9 +145,25 @@ namespace SiMay.RemoteService.Loader
             }, true);
         }
 
-        private bool CreateProcessAsUser(uint dwSessionId)
+        private void Log(string log)
         {
-            var desktopName = Win32Interop.GetCurrentDesktop();
+            var sw = new System.IO.StreamWriter("C:\\Slog.log", true);
+            sw.WriteLine(log);
+            sw.Close();
+
+        }
+
+        private bool CreateProcessAsUser(uint dwSessionId, string desktopName)
+        {
+            //uint dwSessionId = Kernel32.WTSGetActiveConsoleSessionId();
+            //var desktopName = Win32Interop.GetCurrentDesktop();
+            //var rdpSessionID = Win32Interop.GetRDPSession();
+            //if (rdpSessionID > 0 && rdpSessionID == dwSessionId)
+            //{
+            //desktopName = "winlogon";
+            //dwSessionId = rdpSessionID;
+            //}
+
             var openProcessString = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(Assembly.GetExecutingAssembly().Location));
             //用户进程启动
             var result = Win32Interop.OpenInteractiveProcess(openProcessString + $" \"-user\" \"-port:{_port}\" \"-sessionId:{dwSessionId}\"", desktopName, true, dwSessionId, out _);
@@ -196,14 +215,26 @@ namespace SiMay.RemoteService.Loader
         [PacketHandler(TrunkMessageHead.S_CreateUserProcess)]
         private void CreateUserProcessHandler(TcpSocketSaeaSession session)
         {
-            var dwSessionId = session.CompletedBuffer.GetMessageEntity<CreateUserProcessPack>().SessionId;
+            var request = session.CompletedBuffer.GetMessageEntity<CreateUserProcessPack>();
             //lock (_lock)
             //{
             //    if (_userProcessSessionIdList.Any(c => c.SessionId == dwSessionId))
             //        return;
-            //用户进程启动
-            this.CreateProcessAsUser((uint)dwSessionId);
+            Log($"{request.SessionId}_{request.DesktopName}");
+            //用户进程启5
+            //this.CreateProcessAsUser((uint)request.SessionId, request.DesktopName);
             //}
+
+            uint dwSessionId = Kernel32.WTSGetActiveConsoleSessionId();
+            var desktopName = Win32Interop.GetCurrentDesktop();
+            var rdpSessionID = Win32Interop.GetRDPSession();
+            if (rdpSessionID > 0)
+            {
+                if (dwSessionId != rdpSessionID)
+                    desktopName = "winlogon";
+                dwSessionId = rdpSessionID;
+            }
+            this.CreateProcessAsUser(dwSessionId, desktopName);
         }
 
         [PacketHandler(TrunkMessageHead.S_SendSas)]
@@ -246,6 +277,7 @@ namespace SiMay.RemoteService.Loader
                     SessionState = (int)c.State,
                     WindowStationName = c.pWinStationName,
                     SessionId = c.SessionID,
+                    HasUserProcess = c.SessionID == Kernel32.WTSGetActiveConsoleSessionId()
                     //HasUserProcess = _userProcessSessionIdList.FindIndex(i => i.SessionId == c.SessionID) > -1 ? true : false
                 })
                 .ToArray();
@@ -258,6 +290,7 @@ namespace SiMay.RemoteService.Loader
             session.SendAsync(data);
             //}
         }
+
         protected override void OnStop()
         {
             try

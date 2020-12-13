@@ -39,7 +39,8 @@ namespace SiMay.RemoteControls.Core
                     "Microsoft.Win32.Primitives.dll",
                     "AForge.Video.dll",
                     "AForge.Video.DirectShow.dll",
-                    "Newtonsoft.Json.dll"
+                    "Newtonsoft.Json.dll",
+                    "FFmpeg.AutoGen.dll"
             };
 
             foreach (var fileName in pluginFileNames)

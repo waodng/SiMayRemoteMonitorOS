@@ -8,8 +8,8 @@ using System.IO;
 namespace SiMay.Service.Core
 {
     [ServiceName("Shell管理")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_SHELL)]
-    public class ShellService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_SHELL)]
+    public class ShellService : ApplicationRemoteServiceBase
     {
         private Process _pipe;
         public override void SessionInited(SessionProviderContext session)

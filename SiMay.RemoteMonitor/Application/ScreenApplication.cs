@@ -77,12 +77,6 @@ namespace SiMay.RemoteMonitor.Application
             this.Show();
         }
 
-        public void SetParameter(object arg)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public void SessionClose(ApplicationBaseAdapterHandler handler)
         {
             _timer.Stop();

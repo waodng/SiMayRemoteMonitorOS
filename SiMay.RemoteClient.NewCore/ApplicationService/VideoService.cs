@@ -10,8 +10,8 @@ using System.Threading;
 namespace SiMay.Service.Core
 {
     [ServiceName("远程监控摄像头")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_VIDEO)]
-    public class VideoService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_VIDEO)]
+    public class VideoService : ApplicationRemoteServiceBase
     {
         private int qty = 30;
         private bool isOpen = false;

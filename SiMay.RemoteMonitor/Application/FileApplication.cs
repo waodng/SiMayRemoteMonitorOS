@@ -57,11 +57,6 @@ namespace SiMay.RemoteMonitor.Application
             this.Show();
         }
 
-        public void SetParameter(object arg)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SessionClose(ApplicationBaseAdapterHandler handler)
         {
             this.Text = this._title + " [" + this.RemoteFileAdapterHandler.State.ToString() + "]";
@@ -610,7 +605,7 @@ namespace SiMay.RemoteMonitor.Application
                 TransportMode transferMode = TransportMode.Continuingly;
                 if (!_transferMode.HasValue)
                 {
-                    FileTransferModeForm dlg = new FileTransferModeForm();
+                    FileTransportModeDialog dlg = new FileTransportModeDialog();
                     dlg.TipMessage = "此文件夹已包含一个名为 " + Path.GetFileName(localFileName) + " 的文件";
                     dlg.ShowDialog();
                     transferMode = dlg.TransferModeResult;
@@ -705,7 +700,7 @@ namespace SiMay.RemoteMonitor.Application
                     TransportMode transferMode = TransportMode.Continuingly;
                     if (!_transferMode.HasValue)
                     {
-                        FileTransferModeForm dlg = new FileTransferModeForm();
+                        FileTransportModeDialog dlg = new FileTransportModeDialog();
                         dlg.TipMessage = "此远程文件夹已包含一个名为 " + Path.GetFileName(r) + " 的文件";
                         dlg.ShowDialog();
                         transferMode = dlg.TransferModeResult;

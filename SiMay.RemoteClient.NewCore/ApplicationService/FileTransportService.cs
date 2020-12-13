@@ -10,16 +10,19 @@ using SiMay.Core;
 using SiMay.ModelBinder;
 using SiMay.Net.SessionProvider;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace SiMay.Service.Core
 {
     [ServiceName("远程传输文件")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_FILE_TRANSPORT)]
-    public class FileTransportService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_FILE_TRANSPORT)]
+    public class FileTransportService : ApplicationRemoteServiceBase
     {
-        FileStream _fileStream = default;
-        long _receiveCount = 0;
-        long _contentCount = 0;
+        private string _destionPath = string.Empty;
+        private FileStream _fileStream = default;
+        private AutoResetEvent _autoResetEvent = new AutoResetEvent(true);
+        private long _receiveCount = 0;
+        private long _contentCount = 0;
         public override void SessionClosed()
         {
             try
@@ -30,7 +33,13 @@ namespace SiMay.Service.Core
                     _fileStream.Dispose();
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                _autoResetEvent.Set();
+            }
         }
 
         public override void SessionInited(SessionProviderContext session)
@@ -42,52 +51,80 @@ namespace SiMay.Service.Core
         public FileTransportBlockResponsePacket FristBlock(SessionProviderContext session)
         {
             var request = session.GetMessageEntity<FileTransportBlockPacket>();
-            var tempPath = GetTempFilePath(".tmp");
-
+            var filePath = request.DestPath.IsNullOrEmpty() ? GetTempFilePath(".tmp") : request.DestPath;
             _contentCount = request.FileContentLength;
+            _destionPath = filePath;
             var result = true;
-            try
-            {
-                _fileStream = new FileStream(tempPath,
-                        System.IO.FileMode.OpenOrCreate,
-                        System.IO.FileAccess.ReadWrite,
-                        System.IO.FileShare.ReadWrite);
-                _fileStream.Write(request.BinaryBlock, 0, request.BinaryBlock.Length);
-                _receiveCount += request.BinaryBlock.Length;
 
-                if (_receiveCount >= _contentCount)
-                    _fileStream.Close();
-            }
-            catch (Exception)
-            {
+            if (Directory.Exists(Path.GetDirectoryName(filePath)))
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+            if (File.Exists(filePath) && new FileInfo(filePath).Length == request.FileContentLength)
                 result = false;
-                _fileStream.Close();
+            else
+            {
+                try
+                {
+                    _autoResetEvent.WaitOne();
+                    _receiveCount = 0;
+                    _fileStream = new FileStream(filePath + ".temp",
+                            System.IO.FileMode.OpenOrCreate,
+                            System.IO.FileAccess.ReadWrite,
+                            System.IO.FileShare.ReadWrite);
+                    _fileStream.Write(request.BinaryBlock, 0, request.BinaryBlock.Length);
+                    _receiveCount += request.BinaryBlock.Length;
+
+                    if (_receiveCount >= _contentCount)
+                        this.Close();
+                }
+                catch (Exception)
+                {
+                    result = false;
+                    this.Close();
+                }
             }
             return new FileTransportBlockResponsePacket
             {
-                FilePath = tempPath,
+                FilePath = filePath,
                 IsOK = result
             };
         }
 
         [PacketHandler(MessageHead.S_FILE_TRANSPORT_NEXT)]
-        public async void ContinueWrite(SessionProviderContext session)
+        public void ContinueWrite(SessionProviderContext session)
         {
             try
             {
                 var data = session.GetMessage();
                 if (_fileStream.CanWrite)
                 {
-                    await _fileStream.WriteAsync(data, 0, data.Length);
+                    _fileStream.Write(data, 0, data.Length);
                     _receiveCount += data.Length;
                 }
                 if (_receiveCount >= _contentCount)
-                    _fileStream.Close();
+                    this.Close();
             }
             catch (Exception)
             {
-                throw;
             }
+        }
+
+        private void Close()
+        {
+            try
+            {
+                _fileStream.Flush();
+                _fileStream.Close();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                _fileStream.Dispose();
+                _autoResetEvent.Set();
+            }
+            File.Move(_fileStream.Name, _destionPath);
         }
 
         private string GetTempFilePath(string extension)

@@ -10,7 +10,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_AUDIO)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_AUDIO)]
     public class AudioAdapterHandler : ApplicationBaseAdapterHandler
     {
         public event Action<AudioAdapterHandler, byte[]> OnPlayerEventHandler;

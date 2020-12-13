@@ -202,5 +202,8 @@ namespace SiMay.Platform.Windows
             TcpTableOwnerModuleConnections,
             TcpTableOwnerModuleAll
         }
+
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool SetDllDirectory(string lpPathName);
     }
 }

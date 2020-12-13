@@ -10,7 +10,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_SYSMANAGER)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_SYSMANAGER)]
     public class SystemAdapterHandler : ApplicationBaseAdapterHandler
     {
         public async Task<SystemInfoItem[]> GetSystemInfoItems()
@@ -72,12 +72,13 @@ namespace SiMay.RemoteControls.Core
             return null;
         }
 
-        public async Task CreateProcessAsUser(int sessionId)
+        public async Task CreateProcessAsUser(int sessionId, string desktopName)
         {
             await SendTo(MessageHead.S_SYSTEM_CREATE_USER_PROCESS,
                 new CreateProcessAsUserPack()
                 {
-                    SessionId = sessionId
+                    SessionId = sessionId,
+                    DesktopName = desktopName
                 });
         }
 

@@ -80,6 +80,9 @@
     <Reference Include="Accord.Video.FFMPEG, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=x86">
       <HintPath>..\packages\Accord.Video.FFMPEG.3.8.0\lib\net46\Accord.Video.FFMPEG.dll</HintPath>
     </Reference>
+    <Reference Include="FFmpeg.AutoGen, Version=4.3.1.0, Culture=neutral, PublicKeyToken=9b7632533a381715, processorArchitecture=MSIL">
+      <HintPath>..\packages\FFmpeg.AutoGen.4.3.1\lib\net45\FFmpeg.AutoGen.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
@@ -118,6 +121,18 @@
       <DependentUpon>FileApplication.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\FileCommon\WindowsForFileStream.cs" />
+    <Compile Include="Application\FileTransportApplication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Application\FileTransportApplication.Designer.cs">
+      <DependentUpon>FileTransportApplication.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Application\RemoteDesktopApplication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Application\RemoteDesktopApplication.Designer.cs">
+      <DependentUpon>RemoteDesktopApplication.cs</DependentUpon>
+    </Compile>
     <Compile Include="Application\ScreenMonitorChangeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,6 +198,7 @@
       <DependentUpon>TcpConnectionApplication.cs</DependentUpon>
     </Compile>
     <Compile Include="Entitys\KeyValueItem.cs" />
+    <Compile Include="Helper\BasicApplication.cs" />
     <Compile Include="Helper\ListViewSortHelper.cs" />
     <Compile Include="Enums\FileKind.cs" />
     <Compile Include="Extensions\ListViewExtensions.cs" />
@@ -275,11 +291,11 @@
     <Compile Include="MainApplication\InputDialog.Designer.cs">
       <DependentUpon>InputDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Application\FileTransferModeForm.cs">
+    <Compile Include="Application\FileTransportModeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Application\FileTransferModeForm.Designer.cs">
-      <DependentUpon>FileTransferModeForm.cs</DependentUpon>
+    <Compile Include="Application\FileTransportModeDialog.Designer.cs">
+      <DependentUpon>FileTransportModeDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\USessionListItem.cs" />
     <Compile Include="MainApplication\MessageBoxForm.cs">
@@ -352,6 +368,7 @@
     <Compile Include="UserControls\WordTextBox.designer.cs">
       <DependentUpon>WordTextBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="VideoEncoder\ErrorCodeHelper.cs" />
     <Compile Include="Win32Api.cs" />
     <EmbeddedResource Include="Application\AudioConfigurationForm.resx">
       <DependentUpon>AudioConfigurationForm.cs</DependentUpon>
@@ -361,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Application\FileApplication.resx">
       <DependentUpon>FileApplication.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Application\FileTransportApplication.resx">
+      <DependentUpon>FileTransportApplication.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Application\RegEditorApplication.resx">
       <DependentUpon>RegEditorApplication.cs</DependentUpon>
@@ -376,6 +396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Application\RegValueEditWordForm.resx">
       <DependentUpon>RegValueEditWordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Application\RemoteDesktopApplication.resx">
+      <DependentUpon>RemoteDesktopApplication.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Application\ScreenMonitorChangeForm.resx">
       <DependentUpon>ScreenMonitorChangeForm.cs</DependentUpon>
@@ -410,8 +433,8 @@
     <EmbeddedResource Include="MainApplication\InputDialog.resx">
       <DependentUpon>InputDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Application\FileTransferModeForm.resx">
-      <DependentUpon>FileTransferModeForm.cs</DependentUpon>
+    <EmbeddedResource Include="Application\FileTransportModeDialog.resx">
+      <DependentUpon>FileTransportModeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainApplication\MessageBoxForm.resx">
       <DependentUpon>MessageBoxForm.cs</DependentUpon>
@@ -481,6 +504,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\KeyboradManager.bmp" />
+    <Content Include="Resources\loading.gif" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\exit.bmp" />

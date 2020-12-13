@@ -37,6 +37,8 @@ namespace SiMay.RemoteMonitor.MainApplication
                 .ApplicationRegister<SystemApplication>()
                 .ApplicationRegister<TcpConnectionApplication>()
                 .ApplicationRegister<VideoApplication>()
+                .ApplicationRegister<FileTransportApplication>()
+                .ApplicationRegister<RemoteDesktopApplication>()
                 .ApplicationRegister<RemoteUpdateApplication>();
 
             var config = File.Exists(SysConstantsExtend.ConfigPath) ? JsonConvert.DeserializeObject<SystemAppConfig>(File.ReadAllText(SysConstantsExtend.ConfigPath)) : new SystemAppConfig();
@@ -155,13 +157,13 @@ namespace SiMay.RemoteMonitor.MainApplication
                 var type = c.ApplicationType;
                 if (c.ApplicationType.OnMenu())
                 {
-                    var stripMenu = new UToolStripMenuItem(type.GetApplicationName(), c.ApplicationType);
+                    var stripMenu = new UToolStripMenuItem(Extensions.TypeExtension.GetApplicationName(type), c.ApplicationType);
                     stripMenu.Click += StripMenu_Click;
                     this.cmdContext.Items.Insert(0, stripMenu);
                 }
                 if (c.ApplicationType.OnTools())
                 {
-                    var stripButton = new UToolStripButton(type.GetApplicationName(), SysUtilExtend.GetResourceImageByName(type.GetIconResourceName()), type);
+                    var stripButton = new UToolStripButton(Extensions.TypeExtension.GetApplicationName(type), SysUtilExtend.GetResourceImageByName(type.GetIconResourceName()), type);
                     stripButton.Click += StripButton_Click;
                     this.toolStrip1.Items.Insert(3, stripButton);
                 }
@@ -275,8 +277,8 @@ namespace SiMay.RemoteMonitor.MainApplication
         private bool OnApplicationCreatedEventHandler(IApplication app)
         {
             //远程更新窗口
-            if (app is RemoteUpdateApplication)
-                app.SetParameter(_remoteUpdateServiceDialog.updateList);
+            if (app is RemoteUpdateApplication && app is IApplicationParameter receiveParameterApplication)
+                receiveParameterApplication.SetParameter(_remoteUpdateServiceDialog.updateList);
 
             return true;
         }
@@ -416,10 +418,10 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             var ustripbtn = sender as UToolStripButton;
             string[] appkeys = ustripbtn.ApplicationType.GetActivateApplicationKey();
-            this.GetSelectedDesktopView().ForEach(c =>
+            this.GetSelectedDesktopView().ForEach(async c =>
             {
                 foreach (var key in appkeys)
-                    this._appMainAdapterHandler.RemoteActivateService(c.SessionSyncContext, key);
+                    await SimpleApplicationHelper.SimpleApplicationCollection.GetSimpleApplication<ActivateRemoteServiceSimpleApplication>().RemoteActivateService(c.SessionSyncContext.Session, key);
             });
         }
 
@@ -427,10 +429,10 @@ namespace SiMay.RemoteMonitor.MainApplication
         {
             var ustripbtn = sender as UToolStripMenuItem;
             string[] appkeys = ustripbtn.ApplicationType.GetActivateApplicationKey();
-            this.GetSelectedListItem().ForEach(c =>
+            this.GetSelectedListItem().ForEach(async c =>
             {
                 foreach (var key in appkeys)
-                    this._appMainAdapterHandler.RemoteActivateService(c.SessionSyncContext, key);
+                    await SimpleApplicationHelper.SimpleApplicationCollection.GetSimpleApplication<ActivateRemoteServiceSimpleApplication>().RemoteActivateService(c.SessionSyncContext.Session, key);
             });
         }
 
@@ -438,9 +440,9 @@ namespace SiMay.RemoteMonitor.MainApplication
         /// 双击屏幕墙执行一些任务
         /// </summary>
         /// <param name="session"></param>
-        private void DesktopViewDbClick(SessionSyncContext syncContext)
+        private async void DesktopViewDbClick(SessionSyncContext syncContext)
         {
-            this._appMainAdapterHandler.RemoteActivateService(syncContext, AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DbClickViewExc);
+            await SimpleApplicationHelper.SimpleApplicationCollection.GetSimpleApplication<ActivateRemoteServiceSimpleApplication>().RemoteActivateService(syncContext.Session, AppConfiguration.GetApplicationConfiguration<SystemAppConfig>().DbClickViewExc);
         }
 
         /// <summary>
@@ -926,10 +928,10 @@ namespace SiMay.RemoteMonitor.MainApplication
         private void UpdateClient_Click(object sender, EventArgs e)
         {
             var appKeys = typeof(RemoteUpdateApplication).GetActivateApplicationKey();
-            this.GetSelectedListItem().ForEach(c =>
+            this.GetSelectedListItem().ForEach(async c =>
             {
                 foreach (var key in appKeys)
-                    this._appMainAdapterHandler.RemoteActivateService(c.SessionSyncContext, key);
+                    await SimpleApplicationHelper.SimpleApplicationCollection.GetSimpleApplication<ActivateRemoteServiceSimpleApplication>().RemoteActivateService(c.SessionSyncContext.Session, key);
             });
             _remoteUpdateServiceDialog.ShowDialog();
         }

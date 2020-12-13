@@ -37,5 +37,11 @@ namespace SiMay.RemoteMonitor.Application.FileCommon
         {
             this._fileStream.Write(data, offset, length);
         }
+
+        public void Dispose()
+        {
+            this._fileStream.Close();
+            this._fileStream.Dispose();
+        }
     }
 }

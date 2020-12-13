@@ -67,6 +67,11 @@ namespace SiMay.Service.Core
         public const int SERVICE_RELOADER = 9;
 
         /// <summary>
+        /// 服务重启
+        /// </summary>
+        public const int SERVICE_REBOOT = 10;
+
+        /// <summary>
         /// 设置系统会话状态
         /// </summary>
         /// <param name="status"></param>

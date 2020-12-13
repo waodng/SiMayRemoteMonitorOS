@@ -21,28 +21,15 @@ namespace SiMay.Service.Core
                 .SimpleServiceRegister<MessageBoxSimpleService>()
                 .SimpleServiceRegister<ShellSimpleService>()
                 .SimpleServiceRegister<WebSimpleService>()
+                .SimpleServiceRegister<ActivateRemoteServiceSimpleService>()
                 .SimpleServiceRegister<WsStatusSimpleService>();
+
+            GlobalMessageBus.SubScribe(BusTopic.CREATE_SERVICE_POST_TO_SEQUENCE, CreateRemoteServiceBusEvent);
         }
 
-        [PacketHandler(MessageHead.S_MAIN_ACTIVATE_APPLICATION_SERVICE)]
-        public void ActivateApplicationService(SessionProviderContext session)
+        private void CreateRemoteServiceBusEvent(string topic, object message)
         {
-            var activateServiceRequest = session.GetMessageEntity<ActivateServicePack>();
-            string applicationKey = activateServiceRequest.CommandText.Split('.').Last<string>();
-
-            //获取当前消息发送源主控端标识
-            long accessId = session.GetAccessId();
-            var context = SysUtil.RemoteServiceTypes.FirstOrDefault(x => x.RemoteServiceKey.Equals(applicationKey));
-            if (!context.IsNull())
-            {
-                var serviceName = context.RemoteServiceType.GetCustomAttribute<ServiceNameAttribute>(true);
-                SystemMessageNotify.ShowTip($"正在进行远程操作:{(serviceName.IsNull() ? context.RemoteServiceKey : serviceName.Name) }");
-                var applicationService = Activator.CreateInstance(context.RemoteServiceType, null) as ApplicationRemoteService;
-                applicationService.ApplicationKey = context.RemoteServiceKey;
-                applicationService.ActivatedCommandText = activateServiceRequest.CommandText;
-                applicationService.AccessId = accessId;
-                this.PostToAwaitSequence(applicationService);
-            }
+            this.PostToAwaitSequence(message as ApplicationRemoteServiceBase);
         }
 
         /// <summary>

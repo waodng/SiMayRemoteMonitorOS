@@ -8,6 +8,8 @@ namespace SiMay.Core
 {
     public class CreateProcessAsUserPack : EntitySerializerBase
     {
+        public string DesktopName { get; set; }
+
         public int SessionId { get; set; }
     }
 

@@ -12,8 +12,8 @@ using CommonWin32Api = SiMay.Platform.Windows.CommonWin32Api;
 namespace SiMay.Service.Core
 {
     [ServiceName("Tcp连接管理")]
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_TCP)]
-    public class TcpConnectionService : ApplicationRemoteService
+    [ApplicationName(ApplicationNameConstant.REMOTE_TCP)]
+    public class TcpConnectionService : ApplicationRemoteServiceBase
     {
         public override void SessionInited(SessionProviderContext session)
         {

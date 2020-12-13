@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SiMay.Service.Core
 {
-    public class AwaitTaskSequence : ConcurrentQueue<ApplicationRemoteService>
+    public class AwaitTaskSequence : ConcurrentQueue<ApplicationRemoteServiceBase>
     {
-        public ApplicationRemoteService Dequeue()
+        public ApplicationRemoteServiceBase Dequeue()
         {
             base.TryDequeue(out var service);
             return service;

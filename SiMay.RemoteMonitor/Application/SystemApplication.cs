@@ -33,12 +33,6 @@ namespace SiMay.RemoteMonitor.Application
         {
             this.Show();
         }
-
-        public void SetParameter(object arg)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SessionClose(ApplicationBaseAdapterHandler handler)
         {
             this.Text = _title + " [" + this.SystemAdapterHandler.State.ToString() + "]";
@@ -271,33 +265,19 @@ namespace SiMay.RemoteMonitor.Application
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            ListView.SelectedListViewItemCollection SelectItem = this.sessionsListView.SelectedItems;
-            for (int i = 0; i < SelectItem.Count; i++)
-                this.sessionsListView.Items[SelectItem[i].Index].Checked = true;
+            var desktopName = desktopNameCombox.Text;
+            if (desktopName.IsNullOrEmpty())
+            {
+                MessageBox.Show("请选择桌面类型。", "提示", 0, MessageBoxIcon.Information);
+                return;
+            }
 
             var ids = new List<int>();
-            foreach (SessionViewItem item in this.sessionsListView.Items)
-            {
-                if (item.Checked)
-                {
-                    if (item.HasUserProcess)
-                    {
-                        MessageBoxHelper.ShowBoxExclamation("不能重复创建用户进程!");
-                        return;
-                    }
-                    ids.Add(item.SessionId);
-                }
-
-                item.Checked = false;
-            }
-
-            if (MessageBox.Show("确认要在选中的会话中创建被控用户进程吗?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) != DialogResult.OK)
-                return;
+            foreach (SessionViewItem item in this.sessionsListView.SelectedItems)
+                ids.Add(item.SessionId);
 
             foreach (var sessionId in ids)
-            {
-                await this.SystemAdapterHandler.CreateProcessAsUser(sessionId);
-            }
+                await this.SystemAdapterHandler.CreateProcessAsUser(sessionId, desktopName);
 
             var sessions = await this.SystemAdapterHandler.EnumSession();
             if (!sessions.IsNull())

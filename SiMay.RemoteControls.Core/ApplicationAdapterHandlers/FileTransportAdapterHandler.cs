@@ -10,19 +10,24 @@ using SiMay.Basic;
 
 namespace SiMay.RemoteControls.Core
 {
-    [ApplicationKey(ApplicationKeyConstant.REMOTE_FILE_TRANSPORT)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_FILE_TRANSPORT)]
     public class FileTransportAdapterHandler : ApplicationBaseAdapterHandler
     {
+        /// <summary>
+        /// 发送缓冲区
+        /// </summary>
+        public int BufferSize { get; set; } = 1024 * 512;
+
         public event Action<FileTransportAdapterHandler, string, long, long> TransportProgressEventHandler;
 
-        public async Task<(bool successed, string path)> StartTransport(IStream stream)
+        public async Task<(bool successed, string path)> StartTransport(IStream stream, string remoteDestPath = "")
         {
             var filePath = string.Empty;
-            var buffer = new byte[1024 * 512];
+            var buffer = new byte[BufferSize];
             var readCount = stream.Read(buffer, 0, buffer.Length);
             long sendBytesCount = 0;
 
-            var responsed = await internalFileTransportBlockResponsePacket(buffer.Copy(0, readCount), stream.Length);
+            var responsed = await internalFileTransportBlockResponsePacket(buffer.Copy(0, readCount), stream.Length, remoteDestPath);
             if (!responsed.IsNull() && responsed.IsOK)
             {
                 sendBytesCount += readCount;
@@ -42,11 +47,12 @@ namespace SiMay.RemoteControls.Core
             return (sendBytesCount == stream.Length, filePath);
         }
 
-        private async Task<FileTransportBlockResponsePacket> internalFileTransportBlockResponsePacket(byte[] data, long lenght)
+        private async Task<FileTransportBlockResponsePacket> internalFileTransportBlockResponsePacket(byte[] data, long lenght, string remoteDestPath)
         {
             var responsed = await SendTo(MessageHead.S_FILE_TRANSPORT_FRISTBLOCK,
                 new FileTransportBlockPacket
                 {
+                    DestPath = remoteDestPath,
                     FileContentLength = lenght,
                     BinaryBlock = data
                 });

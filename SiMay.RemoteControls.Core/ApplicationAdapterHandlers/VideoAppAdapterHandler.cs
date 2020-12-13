@@ -12,7 +12,7 @@ using SiMay.Net.SessionProvider;
 
 namespace SiMay.RemoteControls.Core
 {
-    [SiMay.Core.ApplicationKey(ApplicationKeyConstant.REMOTE_VIDEO)]
+    [ApplicationName(ApplicationNameConstant.REMOTE_VIDEO)]
     public class VideoAppAdapterHandler : ApplicationBaseAdapterHandler
     {
         /// <summary>

@@ -180,7 +180,7 @@ namespace SiMay.Service.Core
                         }
                         else if (workType == SessionKind.APP_SERVICE_SESSION)
                         {
-                            var appService = session.AppTokens[1].ConvertTo<ApplicationRemoteService>();
+                            var appService = session.AppTokens[1].ConvertTo<ApplicationRemoteServiceBase>();
 
                             var messageHead = session.GetMessageHead();
                             var operationResult = appService.HandlerBinder.CallFunctionPacketHandler(session, messageHead, appService);
@@ -228,7 +228,7 @@ namespace SiMay.Service.Core
             }
             else
             {
-                ApplicationRemoteService service = _taskAwaitSequence.Dequeue();
+                ApplicationRemoteServiceBase service = _taskAwaitSequence.Dequeue();
                 if (service.IsNull())
                 {
                     //找不到服务。。
@@ -279,7 +279,7 @@ namespace SiMay.Service.Core
             }
             else if (workType == SessionKind.APP_SERVICE_SESSION)
             {
-                var appService = ((ApplicationRemoteService)session.AppTokens[1]);
+                var appService = ((ApplicationRemoteServiceBase)session.AppTokens[1]);
                 if (appService.WhetherClosed)
                     return;
                 appService.WhetherClosed = true;
@@ -307,7 +307,7 @@ namespace SiMay.Service.Core
         /// 将服务加入到等待队列并发起工作连接
         /// </summary>
         /// <param name="service"></param>
-        protected void PostToAwaitSequence(ApplicationRemoteService service)
+        protected void PostToAwaitSequence(ApplicationRemoteServiceBase service)
         {
             this._taskAwaitSequence.Enqueue(service);
             this.ConnectToServer();

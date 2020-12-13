@@ -36,9 +36,10 @@
         S_SIMPLE_SERVICE_UPDATE,                           //服务更新
         S_SIMPLE_CHOOES_FILE_UPDATE,                       //选择指定文件更新
 
+        S_SIMPLE_ACTIVATE_REMOTE_SERVICE,                  //创建远程应用服务
+
         //主窗体------------------------------------------------------------
         S_MAIN_REMARK = 1000,                              //备注
-        S_MAIN_ACTIVATE_APPLICATION_SERVICE,                //创建功能服务
 
         //接收指令
         C_MAIN_LOGIN = 2000,                               //上线信息
@@ -64,6 +65,12 @@
         C_SCREEN_BITMP,                                    //图像数据
         C_SCREEN_DIFFBITMAP,                               //差异完整屏幕数据
         C_SCREEN_CLIPOARD_TEXT,                            //剪切板Text
+
+        S_DESKTOP_INIT_INFO,                               //获取模块初始化信息
+        S_DESKTOP_START_PUSH,                              //开始推流
+        S_DESKTOP_BLOCKING_CTRL,                           //网络阻塞控制
+
+        C_DESKTOP_STREAM = 1000,                           //流数据
 
         //文件管理----------------------------------------------------------------
         S_FILE_GET_DRIVES = 1000,                          //发送驱动器列表
